@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>מפת המתח״מים — תיעדוף · משרד התחבורה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+:root{
+  --paper:#FAF8F3;
+  --paper-2:#F3EFE6;
+  --card:#FFFFFF;
+  --ink:#1B1915;
+  --ink-2:#57514633;
+  --ink-soft:#6A6358;
+  --ink-mut:#938B7D;
+  --line:#E6E0D4;
+  --line-2:#D8D1C2;
+  --national:#B0432B;
+  --metro:#DD9326;
+  --urban:#3E769E;
+  --nohub:#A9A192;
+  --accent:#1B1915;
+  --shadow:0 1px 2px rgba(40,33,20,.05),0 8px 28px -12px rgba(40,33,20,.18);
+  --shadow-lg:0 24px 60px -22px rgba(30,24,12,.45);
+  --rail-w:372px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Assistant",system-ui,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+.serif{font-family:"Frank Ruhl Libre",Georgia,serif}
+button{font-family:inherit;cursor:pointer}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#D6CFBF;border-radius:9px;border:2px solid var(--paper)}
+::-webkit-scrollbar-thumb:hover{background:#C3BBA8}
+
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ── Masthead ───────────────────────────── */
+.masthead{
+  flex:0 0 auto;display:flex;align-items:center;gap:18px;
+  padding:13px 26px;background:var(--card);
+  border-bottom:1px solid var(--line);
+  position:relative;z-index:30;
+}
+.crest{
+  width:38px;height:38px;border-radius:9px;flex:0 0 auto;
+  background:linear-gradient(150deg,#26221b,#3a342a);
+  display:grid;place-items:center;color:#F3EAD6;
+}
+.crest svg{width:21px;height:21px}
+.mast-titles{display:flex;flex-direction:column;line-height:1.05}
+.kicker{font-size:11px;letter-spacing:.16em;color:var(--ink-mut);font-weight:700;text-transform:uppercase}
+.mast-titles h1{margin:1px 0 0;font-size:22px;font-weight:900;letter-spacing:-.01em}
+.mast-spacer{flex:1}
+.mast-meta{display:flex;align-items:center;gap:22px}
+.mast-stat{display:flex;flex-direction:column;align-items:flex-end;line-height:1}
+.mast-stat .num{font-family:"Frank Ruhl Libre",serif;font-weight:900;font-size:23px;letter-spacing:-.01em}
+.mast-stat .lab{font-size:11px;color:var(--ink-mut);font-weight:600;margin-top:3px}
+.mast-div{width:1px;height:30px;background:var(--line)}
+
+/* ── Body ───────────────────────────────── */
+.body{flex:1;display:flex;min-height:0;position:relative}
+
+/* Rail */
+.rail{
+  flex:0 0 var(--rail-w);width:var(--rail-w);background:var(--paper);
+  border-inline-end:1px solid var(--line);
+  display:flex;flex-direction:column;min-height:0;z-index:20;
+}
+.rail-scroll{overflow-y:auto;padding:18px 20px 26px}
+.sec{margin-bottom:22px}
+.sec-h{display:flex;align-items:baseline;gap:8px;margin:0 0 11px}
+.sec-h .t{font-size:12.5px;font-weight:800;letter-spacing:.04em;color:var(--ink)}
+.sec-h .h{font-size:11px;color:var(--ink-mut);font-weight:600}
+.sec-h .ln{flex:1;height:1px;background:var(--line);align-self:center}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 11px 6px 10px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--card);
+  font-size:12.5px;font-weight:600;color:var(--ink-soft);
+  transition:.15s;user-select:none;
+}
+.chip:hover{border-color:#C2BAA8}
+.chip .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.chip .cnt{font-size:11px;color:var(--ink-mut);font-weight:700;font-variant-numeric:tabular-nums}
+.chip.off{opacity:.4;background:var(--paper-2)}
+.chip.on{color:var(--ink);background:var(--card)}
+.chip.cls.on{border-color:currentColor}
+
+/* sliders */
+.slider-row{margin-top:6px}
+.slider-lab{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink-soft);font-weight:600;margin-bottom:7px}
+.slider-lab b{font-family:"Frank Ruhl Libre",serif;color:var(--ink);font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:3px;border-radius:3px;
+  background:var(--line-2);outline:none;margin:8px 0 4px;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:var(--accent);border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:grab;
+}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid #fff;cursor:grab}
+
+/* legend */
+.legend{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.lg-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-soft);font-weight:600;padding:3.5px 0}
+.lg-row .dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.lg-sub{font-size:11px;color:var(--ink-mut);font-weight:600;margin:11px 0 7px}
+.lg-sizes{display:flex;align-items:flex-end;gap:14px;padding:2px 2px 0}
+.lg-size{display:flex;flex-direction:column;align-items:center;gap:5px}
+.lg-size i{display:block;border-radius:50%;background:#cfc7b6;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.lg-size span{font-size:10px;color:var(--ink-mut);font-weight:700}
+
+/* layers */
+.layer-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+.layer-row:last-of-type{border-bottom:0}
+.layer-row .ll{flex:1;min-width:0}
+.layer-row .ll .nm{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.layer-row .ll .ds{font-size:11px;color:var(--ink-mut);font-weight:600;margin-top:1px}
+.layer-swatch{width:22px;height:22px;border-radius:6px;flex:0 0 auto;display:grid;place-items:center}
+.toggle{position:relative;width:38px;height:22px;border-radius:99px;background:var(--line-2);border:none;flex:0 0 auto;transition:.18s;padding:0}
+.toggle::after{content:"";position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.18s}
+.toggle.on{background:var(--ink)}
+.toggle.on::after{right:18px}
+.seg{display:flex;gap:4px;background:var(--paper-2);padding:4px;border-radius:10px}
+.seg button{flex:1;border:none;background:transparent;border-radius:7px;padding:7px 4px;font-size:12px;font-weight:700;color:var(--ink-soft);transition:.15s}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.upload-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;
+  padding:11px;border:1.5px dashed var(--line-2);border-radius:11px;background:var(--card);
+  font-size:12.5px;font-weight:700;color:var(--ink-soft);transition:.15s;
+}
+.upload-btn:hover{border-color:var(--urban);color:var(--urban)}
+.upload-hint{font-size:10.5px;color:var(--ink-mut);text-align:center;margin-top:7px;font-weight:600;line-height:1.5}
+
+/* Map */
+.map-wrap{flex:1;position:relative;min-width:0}
+#map{position:absolute;inset:0;background:#E8E4DC}
+.map-overlay{position:absolute;z-index:500;pointer-events:none}
+.map-overlay > *{pointer-events:auto}
+.map-title{
+  top:16px;right:18px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
+  border:1px solid var(--line);border-radius:12px;padding:11px 16px 12px;box-shadow:var(--shadow);
+}
+.map-title .k{font-size:10px;letter-spacing:.14em;color:var(--ink-mut);font-weight:700;text-transform:uppercase}
+.map-title h2{margin:2px 0 0;font-size:18px;font-weight:900;font-family:"Frank Ruhl Libre",serif}
+.map-title .count{font-size:11.5px;color:var(--ink-soft);font-weight:600;margin-top:3px}
+.map-title .count b{color:var(--national);font-weight:800}
+.map-tools{top:16px;left:18px;display:flex;flex-direction:column;gap:8px}
+.tool-btn{
+  width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.95);
+  border:1px solid var(--line);box-shadow:var(--shadow);display:grid;place-items:center;color:var(--ink);
+}
+.tool-btn:hover{background:#fff}
+.tool-btn svg{width:18px;height:18px}
+.leaflet-control-zoom{display:none}
+.leaflet-container{font-family:"Assistant",sans-serif;background:#E8E4DC}
+.leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.7)!important}
+
+/* hover tooltip */
+.hub-tip{
+  background:var(--ink);color:#F4EFE5;border:none;border-radius:8px;padding:6px 10px;
+  font-family:"Assistant",sans-serif;font-weight:700;font-size:12.5px;box-shadow:var(--shadow-lg);
+}
+.hub-tip::before{display:none}
+.hub-tip .tt-sub{font-weight:500;font-size:11px;opacity:.7;margin-top:1px}
+
+/* ── Detail drawer ──────────────────────── */
+.detail{
+  position:absolute;top:0;bottom:0;left:0;width:392px;max-width:92vw;z-index:900;
+  background:var(--card);box-shadow:var(--shadow-lg);border-inline-end:1px solid var(--line);
+  transform:translateX(-104%);transition:transform .34s cubic-bezier(.22,.61,.36,1);
+  display:flex;flex-direction:column;
+}
+.detail.open{transform:translateX(0)}
+.dt-head{background:var(--ink);color:#F6F1E6;padding:17px 20px 16px;position:relative}
+.dt-head .rk{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.dt-rank{font-family:"Frank Ruhl Libre",serif;font-weight:900;font-size:13px;background:var(--metro);color:#231b0e;padding:3px 10px;border-radius:7px;letter-spacing:-.01em}
+.dt-cls{font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;opacity:.92}
+.dt-cls .dot{width:9px;height:9px;border-radius:50%}
+.dt-head h3{margin:0;font-family:"Frank Ruhl Libre",serif;font-weight:900;font-size:24px;line-height:1.12;letter-spacing:-.01em}
+.dt-head .loc{font-size:12.5px;opacity:.62;font-weight:600;margin-top:5px}
+.dt-close{position:absolute;top:14px;left:16px;width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.12);border:none;color:#F6F1E6;display:grid;place-items:center;transition:.15s}
+.dt-close:hover{background:rgba(255,255,255,.24)}
+.dt-body{overflow-y:auto;padding:18px 20px 26px;flex:1}
+
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.kpi .v{font-family:"Frank Ruhl Libre",serif;font-weight:900;font-size:21px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1}
+.kpi .l{font-size:11px;color:var(--ink-soft);font-weight:600;margin-top:5px}
+.kpi.wide{grid-column:1/3}
+
+.dt-sec{margin-bottom:19px}
+.dt-sec > .h{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:800;color:var(--ink-mut);margin-bottom:9px}
+.mode-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mode-chip{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--paper-2);color:var(--ink);border:1px solid var(--line)}
+
+/* radius bars */
+.radii{display:flex;flex-direction:column;gap:11px}
+.radius-row{display:flex;flex-direction:column;gap:5px}
+.radius-row .rl{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--ink-soft)}
+.radius-row .rl b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.bar{height:8px;border-radius:5px;background:var(--paper-2);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .pop{background:var(--urban)}
+.bar .emp{background:var(--metro)}
+.radii-leg{display:flex;gap:16px;margin-top:3px;font-size:11px;font-weight:700;color:var(--ink-soft)}
+.radii-leg span{display:inline-flex;align-items:center;gap:6px}
+.radii-leg i{width:9px;height:9px;border-radius:3px}
+
+.lines-list{display:flex;flex-direction:column;gap:7px}
+.line-item{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--ink-soft);font-weight:600;line-height:1.35}
+.line-item::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink);margin-top:6px;flex:0 0 auto}
+
+.dt-focus{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border:1px solid var(--line-2);border-radius:11px;background:var(--paper);font-size:12.5px;font-weight:800;color:var(--ink);transition:.15s}
+.dt-focus:hover{background:var(--paper-2)}
+
+@media (max-width:560px){
+  .rail{display:none}
+  .detail{width:100%}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="masthead">
+    <div class="crest">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.5" r="2.6"/><path d="M12 2.5C7.6 2.5 4 6 4 10.3c0 5.2 8 11.2 8 11.2s8-6 8-11.2C20 6 16.4 2.5 12 2.5Z"/></svg>
+    </div>
+    <div class="mast-titles">
+      <span class="kicker">נתיבי איילון, חטיבת תוכנית אב - אגף מודלים
+</span>
+      <h1 class="serif">תיעדוף מתח"מים - מיפוי</h1>
+    </div>
+    <div class="mast-spacer"></div>
+    <div class="mast-meta" id="mastMeta"></div>
+  </header>
+
+  <div class="body">
+    <aside class="rail">
+      <div class="rail-scroll" id="rail"></div>
+    </aside>
+
+    <main class="map-wrap">
+      <div id="map" dir="ltr"></div>
+      <div class="map-overlay map-title">
+        <div class="k">מפת המתח״מים</div>
+        <h2 class="serif">לפי סיווג</h2>
+        <div class="count" id="mapCount"></div>
+      </div>
+      <div class="map-overlay map-tools">
+        <button class="tool-btn" id="btnFit" title="התאם לתצוגה">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
+        </button>
+        <button class="tool-btn" id="btnZin" title="התקרב">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button class="tool-btn" id="btnZout" title="התרחק">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+        </button>
+      </div>
+      <div class="detail" id="detail"></div>
+    </main>
+  </div>
+</div>
+
+<input type="file" id="geojsonInput" accept=".geojson,.json" style="display:none" />
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="hubs-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
