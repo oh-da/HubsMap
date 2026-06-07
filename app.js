@@ -24,7 +24,8 @@ function splitLines(str){
   if(!str) return [];
   return str.split(/\)\s*,\s*/).map(s=>s.trim()).filter(Boolean).map(s=>s.endsWith(')')?s:s+')');
 }
-const escA = s => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const escA = esc; // back-compat alias; both content and attribute contexts use full escaping
 function textOn(hex){ const n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255; return (0.299*r+0.587*g+0.114*b)/255>0.6?'#231b0e':'#fff'; }
 function hubModes(h){
   const out=[]; (h.modes||"").split(',').map(s=>s.trim()).filter(Boolean).forEach(m=>{ if(!out.includes(m)) out.push(m); });
@@ -99,7 +100,7 @@ const markers = HUBS.map(h=>{
     weight:1.4, opacity:1, fillOpacity:.82
   });
   m.hub=h;
-  m.bindTooltip(`<div>${h.name}</div><div class="tt-sub">${rankInfo(h).pill} · ${c.label} · ביקוש ${fmtc(h.demand)}</div>`,
+  m.bindTooltip(`<div>${esc(h.name)}</div><div class="tt-sub">${esc(rankInfo(h).pill)} · ${esc(c.label)} · ביקוש ${fmtc(h.demand)}</div>`,
     {className:'hub-tip',direction:'top',offset:[0,-4],opacity:1});
   m.on('click',()=>openDetail(h));
   m.on('mouseover',function(){ if(state.selected!==h) this.setStyle({weight:2.4,fillOpacity:.95}); });
@@ -212,11 +213,11 @@ function openDetail(h){
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <div class="rk">
-        <span class="dt-rank" style="background:${c.color};color:${textOn(c.color)}">${ri.pill}</span>
-        <span class="dt-cls"><span class="dot" style="background:${c.color}"></span>${c.label}</span>
+        <span class="dt-rank" style="background:${c.color};color:${textOn(c.color)}">${esc(ri.pill)}</span>
+        <span class="dt-cls"><span class="dot" style="background:${c.color}"></span>${esc(c.label)}</span>
       </div>
-      <h3>${h.name}</h3>
-      <div class="loc">${ri.sub}</div>
+      <h3>${esc(h.name)}</h3>
+      <div class="loc">${esc(ri.sub)}</div>
     </div>
     <div class="dt-body">
       <div class="kpi-grid">
@@ -228,7 +229,7 @@ function openDetail(h){
 
       <div class="dt-sec">
         <div class="h">אמצעים מתוכננים</div>
-        <div class="mode-chips">${modes.map(m=>`<span class="mode-chip">${m}</span>`).join('')}</div>
+        <div class="mode-chips">${modes.map(m=>`<span class="mode-chip">${esc(m)}</span>`).join('')}</div>
       </div>
 
       <div class="dt-sec">
@@ -239,7 +240,7 @@ function openDetail(h){
 
       <div class="dt-sec">
         <div class="h">קווים (${lines.length})</div>
-        <div class="lines-list">${lines.map(l=>`<div class="line-item">${l}</div>`).join('')||'<div class="line-item">—</div>'}</div>
+        <div class="lines-list">${lines.map(l=>`<div class="line-item">${esc(l)}</div>`).join('')||'<div class="line-item">—</div>'}</div>
       </div>
 
       <button class="dt-focus" onclick="focusHub()">
@@ -325,9 +326,9 @@ function renderRail(){
         </div>
         ${userLayers.map(l=>`<div class="layer-row">
           <div class="layer-swatch" style="background:#f1ecf6"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#7A3FB0" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
-          <div class="ll"><div class="nm">${l.name}</div><div class="ds">שכבה שהועלתה</div></div>
-          <button class="toggle ${l.visible?'on':''}" data-ulayer="${l.id}"></button>
-          <button class="dt-close" style="position:static;width:24px;height:24px;background:#f3efe6;color:#938b7d" data-rm="${l.id}" title="הסר">
+          <div class="ll"><div class="nm">${esc(l.name)}</div><div class="ds">שכבה שהועלתה</div></div>
+          <button class="toggle ${l.visible?'on':''}" data-ulayer="${esc(l.id)}"></button>
+          <button class="dt-close" style="position:static;width:24px;height:24px;background:#f3efe6;color:#938b7d" data-rm="${esc(l.id)}" title="הסר">
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>`).join('')}
         <button class="upload-btn" id="uploadBtn">
