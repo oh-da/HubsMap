@@ -1,0 +1,9 @@
+[
+  {
+    "id": "demo",
+    "name": "שכבת דוגמה (למחיקה)",
+    "file": "example_demo.geojson",
+    "color": "#2E7D6B",
+    "visible": false
+  }
+]

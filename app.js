@@ -158,6 +158,39 @@ function removeUserLayer(id){
   map.removeLayer(userLayers[i].leaf); userLayers.splice(i,1); persistUserLayers(); renderRail();
 }
 
+/* ── built-in shared layers ──
+   Defined in layers/layers.json and committed to the repo, so every viewer
+   sees the same layers (unlike uploads, which stay in one browser).
+   Manifest entry: { "id", "name", "file", "color", "visible" }. ── */
+let builtinLayers=[]; // {id,name,color,visible,leaf}
+const hasFill = f => !!(f && f.geometry && /Polygon/.test(f.geometry.type));
+function styleBuiltin(color){
+  return f => ({pane:'uploads',color,weight:2.4,opacity:.9,fillColor:color,fillOpacity:hasFill(f)?.14:0});
+}
+async function loadBuiltinLayers(){
+  let manifest=[];
+  try{ const r=await fetch('layers/layers.json',{cache:'no-cache'}); if(r.ok) manifest=await r.json(); }
+  catch(e){ return; }
+  if(!Array.isArray(manifest)) return;
+  for(const m of manifest){
+    if(!m||!m.file) continue;
+    try{
+      const r=await fetch('layers/'+m.file,{cache:'no-cache'}); if(!r.ok) continue;
+      const gj=await r.json();
+      const color=m.color||'#2E7D6B';
+      const leaf=L.geoJSON(gj,{
+        pane:'uploads', style:styleBuiltin(color),
+        pointToLayer:(f,ll)=>L.circleMarker(ll,{pane:'uploads',radius:4,color,weight:2,fillColor:'#fff',fillOpacity:1})
+      });
+      const visible=m.visible!==false;
+      const layer={id:m.id||('B'+Math.random().toString(36).slice(2,8)), name:m.name||m.file, color, visible, leaf};
+      builtinLayers.push(layer);
+      if(visible) leaf.addTo(map);
+    }catch(e){ /* skip a bad layer, keep the rest */ }
+  }
+  renderRail();
+}
+
 /* ── filtering ── */
 function passes(h){
   if(!state.classes.has(h.type)) return false;
@@ -324,6 +357,11 @@ function renderRail(){
           <div class="ll"><div class="nm">רשת הקווים (משוער)</div><div class="ds">חיבור מתח״מים על קו משותף</div></div>
           <button class="toggle ${state.network?'on':''}" id="netToggle"></button>
         </div>
+        ${builtinLayers.map(l=>`<div class="layer-row">
+          <div class="layer-swatch" style="background:${esc(l.color)}1f"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="${esc(l.color)}" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
+          <div class="ll"><div class="nm">${esc(l.name)}</div><div class="ds">שכבה משותפת</div></div>
+          <button class="toggle ${l.visible?'on':''}" data-blayer="${esc(l.id)}"></button>
+        </div>`).join('')}
         ${userLayers.map(l=>`<div class="layer-row">
           <div class="layer-swatch" style="background:#f1ecf6"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#7A3FB0" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
           <div class="ll"><div class="nm">${esc(l.name)}</div><div class="ds">שכבה שהועלתה</div></div>
@@ -349,6 +387,7 @@ function wireRail(){
   const rs=rail.querySelector('#rankSlider'); rs.oninput=()=>{ state.rankMax=+rs.value; rs.previousElementSibling.querySelector('b').textContent=state.rankMax; applyFilters(); };
   rail.querySelectorAll('[data-base]').forEach(b=>b.onclick=()=>setBase(b.dataset.base));
   rail.querySelector('#netToggle').onclick=()=>{ state.network=!state.network; if(state.network) netLayer.addTo(map); else map.removeLayer(netLayer); renderRail(); };
+  rail.querySelectorAll('[data-blayer]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); renderRail(); });
   rail.querySelectorAll('[data-ulayer]').forEach(b=>b.onclick=()=>{ const l=userLayers.find(x=>x.id===b.dataset.ulayer); l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); persistUserLayers(); renderRail(); });
   rail.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>removeUserLayer(b.dataset.rm));
   rail.querySelector('#uploadBtn').onclick=()=>document.getElementById('geojsonInput').click();
@@ -376,3 +415,4 @@ map.on('click',e=>{ if(!e.originalEvent.target.closest('.leaflet-interactive')) 
 loadUserLayers();
 renderRail();
 applyFilters();
+loadBuiltinLayers();
