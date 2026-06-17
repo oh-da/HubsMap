@@ -42,8 +42,10 @@ def text(v):
 def build_hub(row):
     """Map one spreadsheet row (dict keyed by header) to a hub object."""
     return {
-        # identity & location
-        "name": text(row.get("HubNameHE")),
+        # identity & location — some hubs (e.g. ungeocoded multi-node
+        # junctions) have no HubNameHE; fall back to a generic label so they
+        # still render with a non-empty tooltip/title.
+        "name": text(row.get("HubNameHE")) or "מתח״ם ללא שם",
         "lat": num(row.get("y")),          # y = latitude
         "lng": num(row.get("x")),          # x = longitude
         # classification / grouping
@@ -98,10 +100,12 @@ def main():
     hubs = []
     for r in ws.iter_rows(min_row=2, values_only=True):
         row = dict(zip(headers, r))
-        # skip rows without coordinates or a name
-        if row.get("HubNameHE") in (None, "") or row.get("x") is None or row.get("y") is None:
+        hub = build_hub(row)
+        # skip only rows that can't be placed on the map (no usable
+        # coordinates); a missing HubNameHE is fine — it gets a fallback name.
+        if hub["lat"] is None or hub["lng"] is None:
             continue
-        hubs.append(build_hub(row))
+        hubs.append(hub)
 
     payload = json.dumps(hubs, ensure_ascii=False, indent=1)
     banner = (

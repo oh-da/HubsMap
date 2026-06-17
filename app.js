@@ -11,8 +11,17 @@ const CLASSES = [
   { key:"Not Hub",     label:"לא מסווג",   color:"#A9A192" },
 ];
 const CLS_MAP = Object.fromEntries(CLASSES.map(c=>[c.key,c]));
-const METROS = ["תל אביב","חיפה","ירושלים","באר שבע","צפון"];
-const MODES  = ['רק"ל','BRT','מטרו','רכבת פרברית','רכבת בינעירונית','רכבת מהירה','Cable Line','פוניקולר'];
+/* Canonical display order for the well-known metros / modes; any extra value
+   that shows up in the data (e.g. a new "מחוז דרום" metro) is appended so it
+   stays visible and filterable instead of being silently dropped. */
+const METRO_ORDER = ["תל אביב","חיפה","ירושלים","באר שבע","צפון"];
+const MODE_ORDER  = ['רק"ל','BRT','מטרו','רכבת פרברית','רכבת בינעירונית','רכבת מהירה','Cable Line','פוניקולר'];
+function withExtras(order, values){
+  const extra = [...new Set(values)].filter(v => v && !order.includes(v));
+  return [...order, ...extra];
+}
+const METROS = withExtras(METRO_ORDER, HUBS.map(h=>h.metro));
+const MODES  = withExtras(MODE_ORDER, HUBS.flatMap(h=>(h.modes||"").split(',').map(s=>s.trim())));
 
 /* ── helpers ── */
 const nf = new Intl.NumberFormat('he-IL');
