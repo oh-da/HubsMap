@@ -34,8 +34,9 @@ per-hub detail drawer.
 
 ## Regenerating the data
 
-`hubs-data.js` is generated from the pipeline's `Results` sheet. After dropping a
-new xlsx into `data/`, regenerate it:
+`hubs-data.js` is generated from the pipeline's results sheet (named
+`hub_prioritization_results`; the generator also falls back to the only sheet if
+it's named differently). After dropping a new xlsx into `data/`, regenerate it:
 
 ```bash
 pip install openpyxl
@@ -46,7 +47,7 @@ python3 scripts/generate_hubs_data.py \
 
 ### Column mapping
 
-The generator maps the spreadsheet's `Results` sheet onto the fields `app.js`
+The generator maps the spreadsheet's results sheet onto the fields `app.js`
 expects:
 
 | Hub field | xlsx column | Notes |
@@ -61,7 +62,7 @@ expects:
 | `logDemand` | `LogDemand` | marker radius scale |
 | `numModes` | `Num_Modes` | |
 | `modes` | `Modes_ForPlot` | comma-separated Hebrew mode names |
-| `lines` | `LineNamesHE` | |
+| `lines` | `Line_Names_forPlot` | comma-separated Hebrew line names (older exports: `LineNamesHE`) |
 | `pop`, `emp` | `TotalPop_2050`, `TotalEmp_2050` | 1.5 km catchment, 2050 |
 | `pop_0_500` … `emp_1000_1500` | matching columns | catchment by ring |
 
