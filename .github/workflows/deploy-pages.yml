@@ -28,6 +28,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Regenerate hubs-data.js from the xlsx
+        # The map reads hubs-data.js, not the .xlsx, so rebuild it here. This
+        # makes dropping a new data/hub_prioritization_results.xlsx enough —
+        # no need to run the generator by hand and commit the result.
+        run: |
+          python -m pip install --quiet openpyxl
+          python scripts/generate_hubs_data.py \
+            --xlsx data/hub_prioritization_results.xlsx \
+            --out hubs-data.js
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
