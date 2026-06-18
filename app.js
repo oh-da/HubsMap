@@ -22,6 +22,10 @@ function withExtras(order, values){
 }
 const METROS = withExtras(METRO_ORDER, HUBS.map(h=>h.metro));
 const MODES  = withExtras(MODE_ORDER, HUBS.flatMap(h=>(h.modes||"").split(',').map(s=>s.trim())));
+/* Display-only labels for modes whose source value differs from the Hebrew
+   term shown to users. The underlying value is kept for filtering/matching. */
+const MODE_LABELS = { 'Cable Line':'רכבלית', 'פוניקולר':'כרמלית' };
+const modeLabel = m => MODE_LABELS[m] || m;
 
 /* ── helpers ── */
 const nf = new Intl.NumberFormat('he-IL');
@@ -231,19 +235,20 @@ function applyFilters(){
 
 /* ── detail drawer ── */
 const detailEl=document.getElementById('detail');
-function radiusBars(h){
+/* Bars for a single metric (key 'pop' or 'emp') across the three radius rings,
+   scaled to that metric's own max so each graph reads on its own. */
+function radiusBarsMetric(h,key,color){
   const rings=[
-    {l:'0–500 מ׳',  pop:h.pop_0_500,    emp:h.emp_0_500},
-    {l:'500–1,000 מ׳',pop:h.pop_500_1000, emp:h.emp_500_1000},
-    {l:'1,000–1,500 מ׳',pop:h.pop_1000_1500,emp:h.emp_1000_1500},
+    {l:'0–500 מ׳',     v:h[key+'_0_500']},
+    {l:'500–1,000 מ׳',  v:h[key+'_500_1000']},
+    {l:'1,000–1,500 מ׳', v:h[key+'_1000_1500']},
   ];
-  const maxT=Math.max(...rings.map(r=>(r.pop||0)+(r.emp||0)),1);
+  const maxV=Math.max(...rings.map(r=>r.v||0),1);
   return rings.map(r=>{
-    const tot=(r.pop||0)+(r.emp||0); const w=(tot/maxT)*100;
-    const pp=tot?(r.pop/tot)*100:0, ep=tot?(r.emp/tot)*100:0;
+    const v=r.v||0; const w=(v/maxV)*100;
     return `<div class="radius-row">
-      <div class="rl"><span>${r.l}</span><b>${fmt(tot)}</b></div>
-      <div class="bar" style="width:${Math.max(w,8)}%"><i class="pop" style="width:${pp}%"></i><i class="emp" style="width:${ep}%"></i></div>
+      <div class="rl"><span>${r.l}</span><b>${fmt(v)}</b></div>
+      <div class="bar" style="width:${Math.max(w,8)}%"><i style="width:100%;background:${color}"></i></div>
     </div>`;
   }).join('');
 }
@@ -276,13 +281,15 @@ function openDetail(h){
 
       <div class="dt-sec">
         <div class="h">אמצעים מתוכננים</div>
-        <div class="mode-chips">${modes.map(m=>`<span class="mode-chip">${esc(m)}</span>`).join('')}</div>
+        <div class="mode-chips">${modes.map(m=>`<span class="mode-chip">${esc(modeLabel(m))}</span>`).join('')}</div>
       </div>
 
       <div class="dt-sec">
-        <div class="h">צפיפות בסביבת המתח״ם · 2050</div>
-        <div class="radii">${radiusBars(h)}</div>
-        <div class="radii-leg"><span><i style="background:#3E769E"></i>אוכלוסייה</span><span><i style="background:#DD9326"></i>תעסוקה</span></div>
+        <div class="h">אוכלוסייה ומועסקים בסביבת המתח״מ - 2050</div>
+        <div class="radii-sub"><i style="background:#3E769E"></i>אוכלוסייה</div>
+        <div class="radii">${radiusBarsMetric(h,'pop','#3E769E')}</div>
+        <div class="radii-sub" style="margin-top:16px"><i style="background:#DD9326"></i>מועסקים</div>
+        <div class="radii">${radiusBarsMetric(h,'emp','#DD9326')}</div>
       </div>
 
       <div class="dt-sec">
@@ -329,7 +336,7 @@ function renderRail(){
     <div class="sec">
       <div class="sec-h"><span class="t">אמצעי תחבורה</span><span class="ln"></span></div>
       <div class="chips" id="modeChips">
-        ${MODES.map(m=>`<button class="chip ${state.modes.has(m)?'on':'off'}" data-mode="${escA(m)}">${m}</button>`).join('')}
+        ${MODES.map(m=>`<button class="chip ${state.modes.has(m)?'on':'off'}" data-mode="${escA(m)}">${esc(modeLabel(m))}</button>`).join('')}
       </div>
     </div>
 
