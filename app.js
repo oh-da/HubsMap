@@ -26,10 +26,6 @@ function withExtras(order, values){
 }
 const METROS = withExtras(METRO_ORDER, HUBS.map(h=>h.metro));
 const MODES  = withExtras(MODE_ORDER, HUBS.flatMap(h=>(h.modes||"").split(',').map(s=>s.trim())));
-/* Display-only labels for modes whose source value differs from the Hebrew
-   term shown to users. The underlying value is kept for filtering/matching. */
-const MODE_LABELS = { 'Cable Line':'רכבלית', 'פוניקולר':'כרמלית' };
-const modeLabel = m => MODE_LABELS[m] || m;
 
 /* ── helpers ── */
 const nf = new Intl.NumberFormat('he-IL');
@@ -218,20 +214,31 @@ function applyFilters(){
 
 /* ── detail drawer ── */
 const detailEl=document.getElementById('detail');
-/* Bars for a single metric (key 'pop' or 'emp') across the three radius rings,
-   scaled to that metric's own max so each graph reads on its own. */
-function radiusBarsMetric(h,key,color){
+function radiusCharts(h){
   const rings=[
-    {l:'0–500 מ׳',     v:h[key+'_0_500']},
-    {l:'500–1,000 מ׳',  v:h[key+'_500_1000']},
-    {l:'1,000–1,500 מ׳', v:h[key+'_1000_1500']},
+    {l:'0–500 מ׳',  pop:h.pop_0_500,    emp:h.emp_0_500},
+    {l:'500–1,000 מ׳',pop:h.pop_500_1000, emp:h.emp_500_1000},
+    {l:'1,000–1,500 מ׳',pop:h.pop_1000_1500,emp:h.emp_1000_1500},
   ];
-  const maxV=Math.max(...rings.map(r=>r.v||0),1);
-  return rings.map(r=>{
-    const v=r.v||0; const w=(v/maxV)*100;
-    return `<div class="radius-row">
-      <div class="rl"><span>${r.l}</span><b>${fmt(v)}</b></div>
-      <div class="bar" style="width:${Math.max(w,8)}%"><i style="width:100%;background:${color}"></i></div>
+  // Each metric gets its own chart, scaled independently against its own max.
+  const chart=(key,cls)=>{
+    const max=Math.max(...rings.map(r=>r[key]||0),1);
+    return rings.map(r=>{
+      const v=r[key]||0; const w=v?Math.max((v/max)*100,2):0;
+      return `<div class="radius-row">
+        <div class="rl"><span>${r.l}</span><b>${fmt(v)}</b></div>
+        <div class="bar"><i class="${cls}" style="width:${w}%"></i></div>
+      </div>`;
+    }).join('');
+  };
+  return `
+    <div class="radii-chart">
+      <div class="radii-title"><i style="background:#3E769E"></i>אוכלוסייה</div>
+      <div class="radii">${chart('pop','pop')}</div>
+    </div>
+    <div class="radii-chart">
+      <div class="radii-title"><i style="background:#DD9326"></i>מועסקים</div>
+      <div class="radii">${chart('emp','emp')}</div>
     </div>`;
 }
 function openDetail(h){
@@ -267,11 +274,8 @@ function openDetail(h){
       </div>
 
       <div class="dt-sec">
-        <div class="h">אוכלוסייה ומועסקים בסביבת המתח״מ - 2050</div>
-        <div class="radii-sub"><i style="background:#3E769E"></i>אוכלוסייה</div>
-        <div class="radii">${radiusBarsMetric(h,'pop','#3E769E')}</div>
-        <div class="radii-sub" style="margin-top:16px"><i style="background:#DD9326"></i>מועסקים</div>
-        <div class="radii">${radiusBarsMetric(h,'emp','#DD9326')}</div>
+        <div class="h">אוכלוסייה ומועסקים בסביבת המתח״ם - 2050</div>
+        ${radiusCharts(h)}
       </div>
 
       <div class="dt-sec">
