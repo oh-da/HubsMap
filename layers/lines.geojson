@@ -7,7 +7,10 @@
       "properties": {
         "LINE_ID": "4.1_Arad-BS",
         "num_points": 21,
-        "length_m": 49463.1
+        "length_m": 49463.1,
+        "Mode": "LRT",
+        "Line_Name": "ערד-באר שבע מערב",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -104,7 +107,10 @@
       "properties": {
         "LINE_ID": "4.1_BS-Arad",
         "num_points": 21,
-        "length_m": 49463.1
+        "length_m": 49463.1,
+        "Mode": "LRT",
+        "Line_Name": "ערד-באר שבע מערב",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -201,7 +207,10 @@
       "properties": {
         "LINE_ID": "4.2_LRT_BRS-Shoket",
         "num_points": 19,
-        "length_m": 20111.3
+        "length_m": 20111.3,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל ליקית",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -290,7 +299,10 @@
       "properties": {
         "LINE_ID": "4.2_LRT_Shoket-BRS",
         "num_points": 19,
-        "length_m": 20329.8
+        "length_m": 20329.8,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל ליקית",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -379,7 +391,10 @@
       "properties": {
         "LINE_ID": "4.3_Ofakim-TelSheva",
         "num_points": 19,
-        "length_m": 29367.8
+        "length_m": 29367.8,
+        "Mode": "LRT",
+        "Line_Name": "אופקים-תל שבע",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -468,7 +483,10 @@
       "properties": {
         "LINE_ID": "4.3_TelSheva-Ofakim",
         "num_points": 19,
-        "length_m": 29367.8
+        "length_m": 29367.8,
+        "Mode": "LRT",
+        "Line_Name": "אופקים-תל שבע",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -557,7 +575,10 @@
       "properties": {
         "LINE_ID": "4.4_Bee'rSheva-Rahat_Main",
         "num_points": 20,
-        "length_m": 25622.6
+        "length_m": 25622.6,
+        "Mode": "LRT",
+        "Line_Name": "רהט מערב-באר שבע דרום מערב",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -650,7 +671,10 @@
       "properties": {
         "LINE_ID": "4.4_Rahat-Bee'rSheva_Main",
         "num_points": 20,
-        "length_m": 25622.6
+        "length_m": 25622.6,
+        "Mode": "LRT",
+        "Line_Name": "רהט מערב-באר שבע דרום מערב",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -743,7 +767,10 @@
       "properties": {
         "LINE_ID": "4.5_Bee'rSheva-Rahat",
         "num_points": 16,
-        "length_m": 22443.2
+        "length_m": 22443.2,
+        "Mode": "LRT",
+        "Line_Name": "רהט צפון-באר שבע דרום מערב",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -820,7 +847,10 @@
       "properties": {
         "LINE_ID": "4.5_Rahat-Bee'rSheva",
         "num_points": 16,
-        "length_m": 22443.2
+        "length_m": 22443.2,
+        "Mode": "LRT",
+        "Line_Name": "רהט צפון-באר שבע דרום מערב",
+        "Area": "Beer Sheva"
       },
       "geometry": {
         "type": "LineString",
@@ -897,7 +927,10 @@
       "properties": {
         "LINE_ID": "ART1-1",
         "num_points": 25,
-        "length_m": 11997.2
+        "length_m": 11997.2,
+        "Mode": "LRT",
+        "Line_Name": "קו חום מערבי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1010,7 +1043,10 @@
       "properties": {
         "LINE_ID": "ART1-2",
         "num_points": 25,
-        "length_m": 11788.3
+        "length_m": 11788.3,
+        "Mode": "LRT",
+        "Line_Name": "קו חום מערבי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1123,7 +1159,10 @@
       "properties": {
         "LINE_ID": "ART2-1",
         "num_points": 25,
-        "length_m": 12493.7
+        "length_m": 12493.7,
+        "Mode": "LRT",
+        "Line_Name": "קו חום מערבי 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1236,7 +1275,10 @@
       "properties": {
         "LINE_ID": "ART2-2",
         "num_points": 25,
-        "length_m": 12474.1
+        "length_m": 12474.1,
+        "Mode": "LRT",
+        "Line_Name": "קו חום מערבי 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1349,7 +1391,10 @@
       "properties": {
         "LINE_ID": "BBEld1",
         "num_points": 14,
-        "length_m": 7665.0
+        "length_m": 7665.0,
+        "Mode": "BRT",
+        "Line_Name": "אלעד-פ\"ת",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1418,7 +1463,10 @@
       "properties": {
         "LINE_ID": "BBEld2",
         "num_points": 14,
-        "length_m": 7575.7
+        "length_m": 7575.7,
+        "Mode": "BRT",
+        "Line_Name": "אלעד-פ\"ת",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1487,7 +1535,10 @@
       "properties": {
         "LINE_ID": "BRT-1",
         "num_points": 11,
-        "length_m": 10230.0
+        "length_m": 10230.0,
+        "Mode": "BRT",
+        "Line_Name": "אריאל-כפר קאסם-פ\"ת",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1544,7 +1595,10 @@
       "properties": {
         "LINE_ID": "BRT-2",
         "num_points": 11,
-        "length_m": 7253.1
+        "length_m": 7253.1,
+        "Mode": "BRT",
+        "Line_Name": "אריאל-כפר קאסם-פ\"ת",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1601,7 +1655,10 @@
       "properties": {
         "LINE_ID": "BRT1-1",
         "num_points": 34,
-        "length_m": 19665.3
+        "length_m": 19665.3,
+        "Mode": "BRT",
+        "Line_Name": "קו חום מזרחי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1750,7 +1807,10 @@
       "properties": {
         "LINE_ID": "BRT1-2",
         "num_points": 34,
-        "length_m": 19261.8
+        "length_m": 19261.8,
+        "Mode": "BRT",
+        "Line_Name": "קו חום מזרחי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -1899,7 +1959,10 @@
       "properties": {
         "LINE_ID": "BRT2-1",
         "num_points": 27,
-        "length_m": 20457.6
+        "length_m": 20457.6,
+        "Mode": "BRT",
+        "Line_Name": "קו חום מזרחי 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -2020,7 +2083,10 @@
       "properties": {
         "LINE_ID": "BRT2-2",
         "num_points": 27,
-        "length_m": 20772.3
+        "length_m": 20772.3,
+        "Mode": "BRT",
+        "Line_Name": "קו חום מזרחי 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -2141,7 +2207,10 @@
       "properties": {
         "LINE_ID": "BRT_Blue_E",
         "num_points": 37,
-        "length_m": 29840.2
+        "length_m": 29840.2,
+        "Mode": "BRT",
+        "Line_Name": "כחול",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -2302,7 +2371,10 @@
       "properties": {
         "LINE_ID": "BRT_Blue_W",
         "num_points": 37,
-        "length_m": 29396.5
+        "length_m": 29396.5,
+        "Mode": "BRT",
+        "Line_Name": "כחול",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -2463,7 +2535,10 @@
       "properties": {
         "LINE_ID": "BRT_Pink_E",
         "num_points": 36,
-        "length_m": 34798.8
+        "length_m": 34798.8,
+        "Mode": "BRT",
+        "Line_Name": "ורוד",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -2620,7 +2695,10 @@
       "properties": {
         "LINE_ID": "BRT_Pink_W",
         "num_points": 36,
-        "length_m": 35281.9
+        "length_m": 35281.9,
+        "Mode": "BRT",
+        "Line_Name": "ורוד",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -2777,7 +2855,10 @@
       "properties": {
         "LINE_ID": "BluRT1",
         "num_points": 31,
-        "length_m": 21098.1
+        "length_m": 21098.1,
+        "Mode": "BRT",
+        "Line_Name": "קו כחול",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -2914,7 +2995,10 @@
       "properties": {
         "LINE_ID": "BluRT2",
         "num_points": 32,
-        "length_m": 21105.9
+        "length_m": 21105.9,
+        "Mode": "BRT",
+        "Line_Name": "קו כחול",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -3055,7 +3139,10 @@
       "properties": {
         "LINE_ID": "East-N",
         "num_points": 22,
-        "length_m": 38331.6
+        "length_m": 38331.6,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל מזרחי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -3156,7 +3243,10 @@
       "properties": {
         "LINE_ID": "East-S",
         "num_points": 24,
-        "length_m": 39185.3
+        "length_m": 39185.3,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל מזרחי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -3265,7 +3355,10 @@
       "properties": {
         "LINE_ID": "Grn1-N",
         "num_points": 39,
-        "length_m": 23127.2
+        "length_m": 23127.2,
+        "Mode": "LRT",
+        "Line_Name": "קו ירוק 1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -3434,7 +3527,10 @@
       "properties": {
         "LINE_ID": "Grn1-S",
         "num_points": 39,
-        "length_m": 23030.6
+        "length_m": 23030.6,
+        "Mode": "LRT",
+        "Line_Name": "קו ירוק 1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -3603,7 +3699,10 @@
       "properties": {
         "LINE_ID": "Grn2-N",
         "num_points": 37,
-        "length_m": 21290.7
+        "length_m": 21290.7,
+        "Mode": "LRT",
+        "Line_Name": "קו ירוק 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -3764,7 +3863,10 @@
       "properties": {
         "LINE_ID": "Grn2-S",
         "num_points": 37,
-        "length_m": 21309.5
+        "length_m": 21309.5,
+        "Mode": "LRT",
+        "Line_Name": "קו ירוק 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -3925,7 +4027,10 @@
       "properties": {
         "LINE_ID": "Grn3-N",
         "num_points": 28,
-        "length_m": 16113.9
+        "length_m": 16113.9,
+        "Mode": "LRT",
+        "Line_Name": "קו ירוק 3",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -4050,7 +4155,10 @@
       "properties": {
         "LINE_ID": "Grn3-S",
         "num_points": 28,
-        "length_m": 16493.0
+        "length_m": 16493.0,
+        "Mode": "LRT",
+        "Line_Name": "קו ירוק 3",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -4175,7 +4283,10 @@
       "properties": {
         "LINE_ID": "Hz-KS1",
         "num_points": 39,
-        "length_m": 19275.2
+        "length_m": 19275.2,
+        "Mode": "BRT",
+        "Line_Name": "קו ורוד",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -4344,7 +4455,10 @@
       "properties": {
         "LINE_ID": "Hz-KS2",
         "num_points": 39,
-        "length_m": 19133.5
+        "length_m": 19133.5,
+        "Mode": "BRT",
+        "Line_Name": "קו ורוד",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -4513,7 +4627,10 @@
       "properties": {
         "LINE_ID": "L1-N",
         "num_points": 39,
-        "length_m": 25815.6
+        "length_m": 25815.6,
+        "Mode": "LRT",
+        "Line_Name": "אשדוד-רחובות",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -4682,7 +4799,10 @@
       "properties": {
         "LINE_ID": "L1-S",
         "num_points": 39,
-        "length_m": 26397.7
+        "length_m": 26397.7,
+        "Mode": "LRT",
+        "Line_Name": "אשדוד-רחובות",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -4851,7 +4971,10 @@
       "properties": {
         "LINE_ID": "L2-N",
         "num_points": 47,
-        "length_m": 25039.3
+        "length_m": 25039.3,
+        "Mode": "LRT",
+        "Line_Name": "אשדוד-יבנה",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -5052,7 +5175,10 @@
       "properties": {
         "LINE_ID": "L2-S",
         "num_points": 47,
-        "length_m": 25087.1
+        "length_m": 25087.1,
+        "Mode": "LRT",
+        "Line_Name": "אשדוד-יבנה",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -5253,7 +5379,10 @@
       "properties": {
         "LINE_ID": "LRT-L1",
         "num_points": 25,
-        "length_m": 54300.4
+        "length_m": 54300.4,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל כביש 4",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -5366,7 +5495,10 @@
       "properties": {
         "LINE_ID": "LRT-L2",
         "num_points": 25,
-        "length_m": 52957.3
+        "length_m": 52957.3,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל כביש 4",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -5479,7 +5611,10 @@
       "properties": {
         "LINE_ID": "LRT10",
         "num_points": 18,
-        "length_m": 10948.9
+        "length_m": 10948.9,
+        "Mode": "LRT",
+        "Line_Name": "חום",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -5564,7 +5699,10 @@
       "properties": {
         "LINE_ID": "LRT11",
         "num_points": 35,
-        "length_m": 18293.8
+        "length_m": 18293.8,
+        "Mode": "LRT",
+        "Line_Name": "אדום",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -5717,7 +5855,10 @@
       "properties": {
         "LINE_ID": "LRT12",
         "num_points": 35,
-        "length_m": 18293.8
+        "length_m": 18293.8,
+        "Mode": "LRT",
+        "Line_Name": "אדום",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -5870,7 +6011,10 @@
       "properties": {
         "LINE_ID": "LRT121",
         "num_points": 34,
-        "length_m": 25207.9
+        "length_m": 25207.9,
+        "Mode": "LRT",
+        "Line_Name": "קו כחול 1",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -6019,7 +6163,10 @@
       "properties": {
         "LINE_ID": "LRT122",
         "num_points": 34,
-        "length_m": 25140.3
+        "length_m": 25140.3,
+        "Mode": "LRT",
+        "Line_Name": "קו כחול 1",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -6168,7 +6315,10 @@
       "properties": {
         "LINE_ID": "LRT131",
         "num_points": 29,
-        "length_m": 22425.5
+        "length_m": 22425.5,
+        "Mode": "LRT",
+        "Line_Name": "קו כחול 2",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -6297,7 +6447,10 @@
       "properties": {
         "LINE_ID": "LRT132",
         "num_points": 29,
-        "length_m": 22384.7
+        "length_m": 22384.7,
+        "Mode": "LRT",
+        "Line_Name": "קו כחול 2",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -6426,7 +6579,10 @@
       "properties": {
         "LINE_ID": "LRT141",
         "num_points": 40,
-        "length_m": 41523.8
+        "length_m": 41523.8,
+        "Mode": "BRT",
+        "Line_Name": "נתניה-כפ\"ס",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -6599,7 +6755,10 @@
       "properties": {
         "LINE_ID": "LRT142",
         "num_points": 39,
-        "length_m": 41426.3
+        "length_m": 41426.3,
+        "Mode": "LRT",
+        "Line_Name": "נתניה-כפ\"ס",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -6768,7 +6927,10 @@
       "properties": {
         "LINE_ID": "LRT151",
         "num_points": 50,
-        "length_m": 29729.1
+        "length_m": 29729.1,
+        "Mode": "LRT",
+        "Line_Name": "נתניה-כפ\"ס 2",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -6981,7 +7143,10 @@
       "properties": {
         "LINE_ID": "LRT152",
         "num_points": 50,
-        "length_m": 29742.5
+        "length_m": 29742.5,
+        "Mode": "LRT",
+        "Line_Name": "נתניה-כפ\"ס 2",
+        "Area": "Netanya"
       },
       "geometry": {
         "type": "LineString",
@@ -7194,7 +7359,10 @@
       "properties": {
         "LINE_ID": "LRT21",
         "num_points": 13,
-        "length_m": 6002.1
+        "length_m": 6002.1,
+        "Mode": "LRT",
+        "Line_Name": "אדום מקווקו",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -7259,7 +7427,10 @@
       "properties": {
         "LINE_ID": "LRT22",
         "num_points": 13,
-        "length_m": 6002.1
+        "length_m": 6002.1,
+        "Mode": "LRT",
+        "Line_Name": "אדום מקווקו",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -7324,7 +7495,10 @@
       "properties": {
         "LINE_ID": "LRT31",
         "num_points": 30,
-        "length_m": 21436.7
+        "length_m": 21436.7,
+        "Mode": "LRT",
+        "Line_Name": "ורוד",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -7457,7 +7631,10 @@
       "properties": {
         "LINE_ID": "LRT32",
         "num_points": 30,
-        "length_m": 21436.7
+        "length_m": 21436.7,
+        "Mode": "LRT",
+        "Line_Name": "ורוד",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -7590,7 +7767,10 @@
       "properties": {
         "LINE_ID": "LRT41",
         "num_points": 33,
-        "length_m": 14485.1
+        "length_m": 14485.1,
+        "Mode": "LRT",
+        "Line_Name": "ירוק",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -7735,7 +7915,10 @@
       "properties": {
         "LINE_ID": "LRT42",
         "num_points": 33,
-        "length_m": 14485.1
+        "length_m": 14485.1,
+        "Mode": "LRT",
+        "Line_Name": "ירוק",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -7880,7 +8063,10 @@
       "properties": {
         "LINE_ID": "LRT51",
         "num_points": 25,
-        "length_m": 11575.8
+        "length_m": 11575.8,
+        "Mode": "LRT",
+        "Line_Name": "ירוק בהיר",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -7993,7 +8179,10 @@
       "properties": {
         "LINE_ID": "LRT52",
         "num_points": 25,
-        "length_m": 11575.8
+        "length_m": 11575.8,
+        "Mode": "LRT",
+        "Line_Name": "ירוק בהיר",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8106,7 +8295,10 @@
       "properties": {
         "LINE_ID": "LRT61",
         "num_points": 32,
-        "length_m": 15760.0
+        "length_m": 15760.0,
+        "Mode": "LRT",
+        "Line_Name": "כחול",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8247,7 +8439,10 @@
       "properties": {
         "LINE_ID": "LRT62",
         "num_points": 32,
-        "length_m": 15760.0
+        "length_m": 15760.0,
+        "Mode": "LRT",
+        "Line_Name": "כחול",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8388,7 +8583,10 @@
       "properties": {
         "LINE_ID": "LRT71",
         "num_points": 25,
-        "length_m": 11862.8
+        "length_m": 11862.8,
+        "Mode": "LRT",
+        "Line_Name": "תכלת",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8501,7 +8699,10 @@
       "properties": {
         "LINE_ID": "LRT72",
         "num_points": 25,
-        "length_m": 11862.8
+        "length_m": 11862.8,
+        "Mode": "LRT",
+        "Line_Name": "תכלת",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8614,7 +8815,10 @@
       "properties": {
         "LINE_ID": "LRT81",
         "num_points": 22,
-        "length_m": 11186.1
+        "length_m": 11186.1,
+        "Mode": "LRT",
+        "Line_Name": "סגול",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8715,7 +8919,10 @@
       "properties": {
         "LINE_ID": "LRT82",
         "num_points": 22,
-        "length_m": 11186.1
+        "length_m": 11186.1,
+        "Mode": "LRT",
+        "Line_Name": "סגול",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8816,7 +9023,10 @@
       "properties": {
         "LINE_ID": "LRT9",
         "num_points": 11,
-        "length_m": 5083.8
+        "length_m": 5083.8,
+        "Mode": "LRT",
+        "Line_Name": "צהוב",
+        "Area": "Jerusalem"
       },
       "geometry": {
         "type": "LineString",
@@ -8873,7 +9083,10 @@
       "properties": {
         "LINE_ID": "Light-Blue_S",
         "num_points": 22,
-        "length_m": 13106.0
+        "length_m": 13106.0,
+        "Mode": "LRT",
+        "Line_Name": "תכלת",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -8974,7 +9187,10 @@
       "properties": {
         "LINE_ID": "Me02-E",
         "num_points": 22,
-        "length_m": 20390.9
+        "length_m": 20390.9,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -9075,7 +9291,10 @@
       "properties": {
         "LINE_ID": "Me02-W",
         "num_points": 22,
-        "length_m": 21265.3
+        "length_m": 21265.3,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -9176,7 +9395,10 @@
       "properties": {
         "LINE_ID": "Me03-L",
         "num_points": 25,
-        "length_m": 31508.6
+        "length_m": 31508.6,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 3 טבעתי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -9289,7 +9511,10 @@
       "properties": {
         "LINE_ID": "Me03-R",
         "num_points": 25,
-        "length_m": 31507.0
+        "length_m": 31507.0,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 3 טבעתי",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -9402,7 +9627,10 @@
       "properties": {
         "LINE_ID": "Me1-1N",
         "num_points": 42,
-        "length_m": 49449.4
+        "length_m": 49449.4,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 1-1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -9583,7 +9811,10 @@
       "properties": {
         "LINE_ID": "Me1-1S",
         "num_points": 42,
-        "length_m": 48809.9
+        "length_m": 48809.9,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 1-1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -9764,7 +9995,10 @@
       "properties": {
         "LINE_ID": "Me1-2N",
         "num_points": 40,
-        "length_m": 49406.8
+        "length_m": 49406.8,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 1-2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -9937,7 +10171,10 @@
       "properties": {
         "LINE_ID": "Me1-2S",
         "num_points": 40,
-        "length_m": 48767.3
+        "length_m": 48767.3,
+        "Mode": "Metro",
+        "Line_Name": "מטרו 1-2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -10110,7 +10347,10 @@
       "properties": {
         "LINE_ID": "Mgt1-E",
         "num_points": 27,
-        "length_m": 14286.5
+        "length_m": 14286.5,
+        "Mode": "LRT",
+        "Line_Name": "קו סגול 1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -10231,7 +10471,10 @@
       "properties": {
         "LINE_ID": "Mgt1-W",
         "num_points": 27,
-        "length_m": 14165.6
+        "length_m": 14165.6,
+        "Mode": "LRT",
+        "Line_Name": "קו סגול 1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -10352,7 +10595,10 @@
       "properties": {
         "LINE_ID": "Mgt2-E",
         "num_points": 38,
-        "length_m": 20129.8
+        "length_m": 20129.8,
+        "Mode": "LRT",
+        "Line_Name": "קו סגול 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -10517,7 +10763,10 @@
       "properties": {
         "LINE_ID": "Mgt2-W",
         "num_points": 38,
-        "length_m": 20436.3
+        "length_m": 20436.3,
+        "Mode": "LRT",
+        "Line_Name": "קו סגול 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -10682,7 +10931,10 @@
       "properties": {
         "LINE_ID": "Mgt3-E",
         "num_points": 31,
-        "length_m": 15943.9
+        "length_m": 15943.9,
+        "Mode": "LRT",
+        "Line_Name": "קו סגול 3",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -10819,7 +11071,10 @@
       "properties": {
         "LINE_ID": "Mgt3-W",
         "num_points": 31,
-        "length_m": 16402.3
+        "length_m": 16402.3,
+        "Mode": "LRT",
+        "Line_Name": "קו סגול 3",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -10956,7 +11211,10 @@
       "properties": {
         "LINE_ID": "Orange_N",
         "num_points": 38,
-        "length_m": 26591.1
+        "length_m": 26591.1,
+        "Mode": "LRT",
+        "Line_Name": "כתום",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -11121,7 +11379,10 @@
       "properties": {
         "LINE_ID": "Orange_S",
         "num_points": 38,
-        "length_m": 25475.1
+        "length_m": 25475.1,
+        "Mode": "LRT",
+        "Line_Name": "כתום",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -11286,7 +11547,10 @@
       "properties": {
         "LINE_ID": "R1001-1",
         "num_points": 4,
-        "length_m": 5436.9
+        "length_m": 5436.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1001",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11315,7 +11579,10 @@
       "properties": {
         "LINE_ID": "R1001-2",
         "num_points": 4,
-        "length_m": 5436.9
+        "length_m": 5436.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1001",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11344,7 +11611,10 @@
       "properties": {
         "LINE_ID": "R1002-1",
         "num_points": 8,
-        "length_m": 9848.7
+        "length_m": 9848.7,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1002",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11389,7 +11659,10 @@
       "properties": {
         "LINE_ID": "R1002-2",
         "num_points": 8,
-        "length_m": 9848.7
+        "length_m": 9848.7,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1002",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11434,7 +11707,10 @@
       "properties": {
         "LINE_ID": "R1003-1",
         "num_points": 3,
-        "length_m": 1330.8
+        "length_m": 1330.8,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1003",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11459,7 +11735,10 @@
       "properties": {
         "LINE_ID": "R1003-2",
         "num_points": 3,
-        "length_m": 1330.8
+        "length_m": 1330.8,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1003",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11484,7 +11763,10 @@
       "properties": {
         "LINE_ID": "R321-1",
         "num_points": 12,
-        "length_m": 16292.4
+        "length_m": 16292.4,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 301",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11545,7 +11827,10 @@
       "properties": {
         "LINE_ID": "R321-2",
         "num_points": 13,
-        "length_m": 16363.2
+        "length_m": 16363.2,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 301",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11610,7 +11895,10 @@
       "properties": {
         "LINE_ID": "R322-1",
         "num_points": 7,
-        "length_m": 17127.5
+        "length_m": 17127.5,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 302",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11651,7 +11939,10 @@
       "properties": {
         "LINE_ID": "R322-2",
         "num_points": 7,
-        "length_m": 17127.5
+        "length_m": 17127.5,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 302",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11692,7 +11983,10 @@
       "properties": {
         "LINE_ID": "R323-1",
         "num_points": 12,
-        "length_m": 12590.2
+        "length_m": 12590.2,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 303",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11753,7 +12047,10 @@
       "properties": {
         "LINE_ID": "R323-2",
         "num_points": 12,
-        "length_m": 12590.2
+        "length_m": 12590.2,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 303",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11814,7 +12111,10 @@
       "properties": {
         "LINE_ID": "R324-1",
         "num_points": 3,
-        "length_m": 5968.9
+        "length_m": 5968.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 304",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11839,7 +12139,10 @@
       "properties": {
         "LINE_ID": "R324-2",
         "num_points": 3,
-        "length_m": 5968.9
+        "length_m": 5968.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 304",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11864,7 +12167,10 @@
       "properties": {
         "LINE_ID": "R325-1",
         "num_points": 7,
-        "length_m": 5353.6
+        "length_m": 5353.6,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 305",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11905,7 +12211,10 @@
       "properties": {
         "LINE_ID": "R325-2",
         "num_points": 7,
-        "length_m": 5353.6
+        "length_m": 5353.6,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 305",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11946,7 +12255,10 @@
       "properties": {
         "LINE_ID": "R327-1",
         "num_points": 10,
-        "length_m": 9719.0
+        "length_m": 9719.0,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 307",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -11999,7 +12311,10 @@
       "properties": {
         "LINE_ID": "R327-2",
         "num_points": 11,
-        "length_m": 9789.8
+        "length_m": 9789.8,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 307",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12056,7 +12371,10 @@
       "properties": {
         "LINE_ID": "R328-1",
         "num_points": 10,
-        "length_m": 9719.0
+        "length_m": 9719.0,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 308",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12109,7 +12427,10 @@
       "properties": {
         "LINE_ID": "R328-2",
         "num_points": 11,
-        "length_m": 9789.8
+        "length_m": 9789.8,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 308",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12166,7 +12487,10 @@
       "properties": {
         "LINE_ID": "R329-1",
         "num_points": 5,
-        "length_m": 8497.1
+        "length_m": 8497.1,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 309",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12199,7 +12523,10 @@
       "properties": {
         "LINE_ID": "R329-2",
         "num_points": 5,
-        "length_m": 8497.1
+        "length_m": 8497.1,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 309",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12232,7 +12559,10 @@
       "properties": {
         "LINE_ID": "R330-1",
         "num_points": 8,
-        "length_m": 6380.5
+        "length_m": 6380.5,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 310",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12277,7 +12607,10 @@
       "properties": {
         "LINE_ID": "R330-2",
         "num_points": 7,
-        "length_m": 6309.7
+        "length_m": 6309.7,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 310",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12318,7 +12651,10 @@
       "properties": {
         "LINE_ID": "R331-1",
         "num_points": 5,
-        "length_m": 7324.9
+        "length_m": 7324.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 311",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12351,7 +12687,10 @@
       "properties": {
         "LINE_ID": "R331-2",
         "num_points": 5,
-        "length_m": 7324.9
+        "length_m": 7324.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 311",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -12384,7 +12723,10 @@
       "properties": {
         "LINE_ID": "RG-RH1",
         "num_points": 22,
-        "length_m": 13488.8
+        "length_m": 13488.8,
+        "Mode": "BRT",
+        "Line_Name": "כפר קאסם-ר\"ג",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -12485,7 +12827,10 @@
       "properties": {
         "LINE_ID": "RG-RH2",
         "num_points": 22,
-        "length_m": 13871.7
+        "length_m": 13871.7,
+        "Mode": "BRT",
+        "Line_Name": "ראש העין-רמת גן",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -12586,7 +12931,10 @@
       "properties": {
         "LINE_ID": "RH-GY1",
         "num_points": 25,
-        "length_m": 27052.6
+        "length_m": 27052.6,
+        "Mode": "BRT",
+        "Line_Name": "רחובות-גן יבנה",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -12699,7 +13047,10 @@
       "properties": {
         "LINE_ID": "RH-GY2",
         "num_points": 4,
-        "length_m": 6022.0
+        "length_m": 6022.0,
+        "Mode": "BRT",
+        "Line_Name": "רחובות-גן יבנה",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -12728,7 +13079,10 @@
       "properties": {
         "LINE_ID": "RH-RG1",
         "num_points": 22,
-        "length_m": 13621.9
+        "length_m": 13621.9,
+        "Mode": "BRT",
+        "Line_Name": "כפר קאסם-ר\"ג",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -12829,7 +13183,10 @@
       "properties": {
         "LINE_ID": "RH-RG2",
         "num_points": 22,
-        "length_m": 14116.8
+        "length_m": 14116.8,
+        "Mode": "BRT",
+        "Line_Name": "ראש העין-רמת גן",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -12930,7 +13287,10 @@
       "properties": {
         "LINE_ID": "Red-N",
         "num_points": 35,
-        "length_m": 22750.9
+        "length_m": 22750.9,
+        "Mode": "LRT",
+        "Line_Name": "קו אדום 1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -13083,7 +13443,10 @@
       "properties": {
         "LINE_ID": "Red-S",
         "num_points": 35,
-        "length_m": 22512.6
+        "length_m": 22512.6,
+        "Mode": "LRT",
+        "Line_Name": "קו אדום 1",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -13236,7 +13599,10 @@
       "properties": {
         "LINE_ID": "Red2-N",
         "num_points": 30,
-        "length_m": 19666.0
+        "length_m": 19666.0,
+        "Mode": "LRT",
+        "Line_Name": "קו אדום 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -13369,7 +13735,10 @@
       "properties": {
         "LINE_ID": "Red2-S",
         "num_points": 30,
-        "length_m": 20679.4
+        "length_m": 20679.4,
+        "Mode": "LRT",
+        "Line_Name": "קו אדום 2",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -13502,7 +13871,10 @@
       "properties": {
         "LINE_ID": "RedN",
         "num_points": 50,
-        "length_m": 31989.1
+        "length_m": 31989.1,
+        "Mode": "LRT",
+        "Line_Name": "אדום",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -13715,7 +14087,10 @@
       "properties": {
         "LINE_ID": "RedS",
         "num_points": 50,
-        "length_m": 31018.5
+        "length_m": 31018.5,
+        "Mode": "LRT",
+        "Line_Name": "אדום",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -13928,7 +14303,10 @@
       "properties": {
         "LINE_ID": "Shut-N",
         "num_points": 11,
-        "length_m": 9535.5
+        "length_m": 9535.5,
+        "Mode": "LRT",
+        "Line_Name": "קו אדום 3",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -13985,7 +14363,10 @@
       "properties": {
         "LINE_ID": "Shut-S",
         "num_points": 11,
-        "length_m": 10027.6
+        "length_m": 10027.6,
+        "Mode": "LRT",
+        "Line_Name": "קו אדום 3",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -14042,7 +14423,10 @@
       "properties": {
         "LINE_ID": "Turquoise_N",
         "num_points": 17,
-        "length_m": 10245.2
+        "length_m": 10245.2,
+        "Mode": "LRT",
+        "Line_Name": "טורקיז",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -14123,7 +14507,10 @@
       "properties": {
         "LINE_ID": "Turquoise_S",
         "num_points": 17,
-        "length_m": 10075.0
+        "length_m": 10075.0,
+        "Mode": "LRT",
+        "Line_Name": "טורקיז",
+        "Area": "Ashdod-ashkelon"
       },
       "geometry": {
         "type": "LineString",
@@ -14204,7 +14591,10 @@
       "properties": {
         "LINE_ID": "Yelw-N",
         "num_points": 36,
-        "length_m": 41248.6
+        "length_m": 41248.6,
+        "Mode": "BRT",
+        "Line_Name": "קו צהוב",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -14361,7 +14751,10 @@
       "properties": {
         "LINE_ID": "Yelw-S",
         "num_points": 36,
-        "length_m": 40276.8
+        "length_m": 40276.8,
+        "Mode": "BRT",
+        "Line_Name": "קו צהוב",
+        "Area": "Tel Aviv"
       },
       "geometry": {
         "type": "LineString",
@@ -14518,7 +14911,10 @@
       "properties": {
         "LINE_ID": "brt011",
         "num_points": 38,
-        "length_m": 26050.0
+        "length_m": 26050.0,
+        "Mode": "BRT",
+        "Line_Name": "BRT 1",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -14683,7 +15079,10 @@
       "properties": {
         "LINE_ID": "brt012",
         "num_points": 38,
-        "length_m": 24777.5
+        "length_m": 24777.5,
+        "Mode": "BRT",
+        "Line_Name": "BRT 1",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -14848,7 +15247,10 @@
       "properties": {
         "LINE_ID": "brt021",
         "num_points": 35,
-        "length_m": 29495.9
+        "length_m": 29495.9,
+        "Mode": "BRT",
+        "Line_Name": "BRT 2",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15001,7 +15403,10 @@
       "properties": {
         "LINE_ID": "brt022",
         "num_points": 34,
-        "length_m": 21044.1
+        "length_m": 21044.1,
+        "Mode": "BRT",
+        "Line_Name": "BRT 2",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15150,7 +15555,10 @@
       "properties": {
         "LINE_ID": "brt031",
         "num_points": 29,
-        "length_m": 12439.8
+        "length_m": 12439.8,
+        "Mode": "BRT",
+        "Line_Name": "BRT 3",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15279,7 +15687,10 @@
       "properties": {
         "LINE_ID": "brt032",
         "num_points": 29,
-        "length_m": 10076.4
+        "length_m": 10076.4,
+        "Mode": "BRT",
+        "Line_Name": "BRT 3",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15408,7 +15819,10 @@
       "properties": {
         "LINE_ID": "brt041",
         "num_points": 11,
-        "length_m": 8786.4
+        "length_m": 8786.4,
+        "Mode": "BRT",
+        "Line_Name": "BRT 4",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15465,7 +15879,10 @@
       "properties": {
         "LINE_ID": "brt042",
         "num_points": 11,
-        "length_m": 8552.2
+        "length_m": 8552.2,
+        "Mode": "BRT",
+        "Line_Name": "BRT 4",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15522,7 +15939,10 @@
       "properties": {
         "LINE_ID": "brt051",
         "num_points": 23,
-        "length_m": 34545.1
+        "length_m": 34545.1,
+        "Mode": "BRT",
+        "Line_Name": "BRT 5",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15627,7 +16047,10 @@
       "properties": {
         "LINE_ID": "brt052",
         "num_points": 23,
-        "length_m": 34243.3
+        "length_m": 34243.3,
+        "Mode": "BRT",
+        "Line_Name": "BRT 5",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15732,7 +16155,10 @@
       "properties": {
         "LINE_ID": "brt061",
         "num_points": 21,
-        "length_m": 19261.6
+        "length_m": 19261.6,
+        "Mode": "BRT",
+        "Line_Name": "BRT 6",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15829,7 +16255,10 @@
       "properties": {
         "LINE_ID": "brt062",
         "num_points": 26,
-        "length_m": 19236.1
+        "length_m": 19236.1,
+        "Mode": "BRT",
+        "Line_Name": "BRT 6",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15946,7 +16375,10 @@
       "properties": {
         "LINE_ID": "c001",
         "num_points": 5,
-        "length_m": 3185.6
+        "length_m": 3185.6,
+        "Mode": "Cable Line",
+        "Line_Name": "רכבלית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -15979,7 +16411,10 @@
       "properties": {
         "LINE_ID": "c002",
         "num_points": 5,
-        "length_m": 3774.8
+        "length_m": 3774.8,
+        "Mode": "Cable Line",
+        "Line_Name": "רכבלית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16012,7 +16447,10 @@
       "properties": {
         "LINE_ID": "lrt01",
         "num_points": 19,
-        "length_m": 35935.8
+        "length_m": 35935.8,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל נופית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16101,7 +16539,10 @@
       "properties": {
         "LINE_ID": "lrt02",
         "num_points": 19,
-        "length_m": 37728.2
+        "length_m": 37728.2,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל נופית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16190,7 +16631,10 @@
       "properties": {
         "LINE_ID": "lrt03",
         "num_points": 24,
-        "length_m": 44807.0
+        "length_m": 44807.0,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל נופית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16299,7 +16743,10 @@
       "properties": {
         "LINE_ID": "lrt04",
         "num_points": 24,
-        "length_m": 48949.5
+        "length_m": 48949.5,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל נופית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16408,7 +16855,10 @@
       "properties": {
         "LINE_ID": "lrt05",
         "num_points": 21,
-        "length_m": 40619.1
+        "length_m": 40619.1,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל נופית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16505,7 +16955,10 @@
       "properties": {
         "LINE_ID": "lrt06",
         "num_points": 21,
-        "length_m": 42097.3
+        "length_m": 42097.3,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל נופית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16602,7 +17055,10 @@
       "properties": {
         "LINE_ID": "lrt07",
         "num_points": 12,
-        "length_m": 18347.9
+        "length_m": 18347.9,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16663,7 +17119,10 @@
       "properties": {
         "LINE_ID": "lrt08",
         "num_points": 12,
-        "length_m": 22700.1
+        "length_m": 22700.1,
+        "Mode": "LRT",
+        "Line_Name": "רק\"ל",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16724,7 +17183,10 @@
       "properties": {
         "LINE_ID": "m0110a",
         "num_points": 42,
-        "length_m": 23959.5
+        "length_m": 23959.5,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -16905,7 +17367,10 @@
       "properties": {
         "LINE_ID": "m0120a",
         "num_points": 47,
-        "length_m": 24261.9
+        "length_m": 24261.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 1",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17106,7 +17571,10 @@
       "properties": {
         "LINE_ID": "m0210a",
         "num_points": 26,
-        "length_m": 16474.1
+        "length_m": 16474.1,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 2",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17223,7 +17691,10 @@
       "properties": {
         "LINE_ID": "m0220a",
         "num_points": 26,
-        "length_m": 16725.7
+        "length_m": 16725.7,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 2",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17340,7 +17811,10 @@
       "properties": {
         "LINE_ID": "m0310a",
         "num_points": 27,
-        "length_m": 14486.2
+        "length_m": 14486.2,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 3",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17461,7 +17935,10 @@
       "properties": {
         "LINE_ID": "m0320a",
         "num_points": 27,
-        "length_m": 14609.3
+        "length_m": 14609.3,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 3",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17582,7 +18059,10 @@
       "properties": {
         "LINE_ID": "m0410a",
         "num_points": 19,
-        "length_m": 17453.1
+        "length_m": 17453.1,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 4",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17671,7 +18151,10 @@
       "properties": {
         "LINE_ID": "m0510a",
         "num_points": 18,
-        "length_m": 9398.1
+        "length_m": 9398.1,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 5",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17756,7 +18239,10 @@
       "properties": {
         "LINE_ID": "m0520a",
         "num_points": 19,
-        "length_m": 9392.4
+        "length_m": 9392.4,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 5",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -17845,7 +18331,10 @@
       "properties": {
         "LINE_ID": "m0610a",
         "num_points": 38,
-        "length_m": 21748.7
+        "length_m": 21748.7,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 6-1",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -18010,7 +18499,10 @@
       "properties": {
         "LINE_ID": "m0620a",
         "num_points": 53,
-        "length_m": 23897.8
+        "length_m": 23897.8,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 6-1",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -18235,7 +18727,10 @@
       "properties": {
         "LINE_ID": "m0710a",
         "num_points": 31,
-        "length_m": 14902.3
+        "length_m": 14902.3,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 7",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -18372,7 +18867,10 @@
       "properties": {
         "LINE_ID": "m0720a",
         "num_points": 27,
-        "length_m": 16127.0
+        "length_m": 16127.0,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 7",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -18493,7 +18991,10 @@
       "properties": {
         "LINE_ID": "m0810a",
         "num_points": 38,
-        "length_m": 12503.5
+        "length_m": 12503.5,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 8",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -18658,7 +19159,10 @@
       "properties": {
         "LINE_ID": "m0820a",
         "num_points": 42,
-        "length_m": 27110.3
+        "length_m": 27110.3,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 8",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -18839,7 +19343,10 @@
       "properties": {
         "LINE_ID": "m0910a",
         "num_points": 41,
-        "length_m": 17607.9
+        "length_m": 17607.9,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 9",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -19016,7 +19523,10 @@
       "properties": {
         "LINE_ID": "m0920a",
         "num_points": 38,
-        "length_m": 15964.6
+        "length_m": 15964.6,
+        "Mode": "BRT",
+        "Line_Name": "מטרונית 9",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -19181,7 +19691,10 @@
       "properties": {
         "LINE_ID": "rail_10_1",
         "num_points": 28,
-        "length_m": 184500.4
+        "length_m": 184500.4,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Beit Shean-Herzliya",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19306,7 +19819,10 @@
       "properties": {
         "LINE_ID": "rail_10_2",
         "num_points": 28,
-        "length_m": 184500.4
+        "length_m": 184500.4,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Herzliya-Beit Shean",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19431,7 +19947,10 @@
       "properties": {
         "LINE_ID": "rail_11_1",
         "num_points": 25,
-        "length_m": 174531.6
+        "length_m": 174531.6,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Zichron-Shoket",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19544,7 +20063,10 @@
       "properties": {
         "LINE_ID": "rail_11_2",
         "num_points": 25,
-        "length_m": 174531.6
+        "length_m": 174531.6,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Shoket-Zichron",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19657,7 +20179,10 @@
       "properties": {
         "LINE_ID": "rail_12_1",
         "num_points": 16,
-        "length_m": 117011.1
+        "length_m": 117011.1,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Zichron-Ashkelon",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19734,7 +20259,10 @@
       "properties": {
         "LINE_ID": "rail_12_2",
         "num_points": 16,
-        "length_m": 117011.1
+        "length_m": 117011.1,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Ashkelon-Zichron",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19811,7 +20339,10 @@
       "properties": {
         "LINE_ID": "rail_13_1",
         "num_points": 13,
-        "length_m": 94420.1
+        "length_m": 94420.1,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Harish-Jerusalem",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19876,7 +20407,10 @@
       "properties": {
         "LINE_ID": "rail_13_2",
         "num_points": 13,
-        "length_m": 94420.1
+        "length_m": 94420.1,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Jerusalem-Harish",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -19941,7 +20475,10 @@
       "properties": {
         "LINE_ID": "rail_14_1",
         "num_points": 13,
-        "length_m": 83273.1
+        "length_m": 83273.1,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Netanya-Jerusalem",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20006,7 +20543,10 @@
       "properties": {
         "LINE_ID": "rail_14_2",
         "num_points": 13,
-        "length_m": 83273.1
+        "length_m": 83273.1,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Jerusalem-Netanya",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20071,7 +20611,10 @@
       "properties": {
         "LINE_ID": "rail_15_1",
         "num_points": 16,
-        "length_m": 135149.5
+        "length_m": 135149.5,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Hadera-Shoket",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20148,7 +20691,10 @@
       "properties": {
         "LINE_ID": "rail_15_2",
         "num_points": 16,
-        "length_m": 135149.5
+        "length_m": 135149.5,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Shoket-Hadera",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20225,7 +20771,10 @@
       "properties": {
         "LINE_ID": "rail_16_1",
         "num_points": 11,
-        "length_m": 51196.6
+        "length_m": 51196.6,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Herzliya-Beit Shemesh",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20282,7 +20831,10 @@
       "properties": {
         "LINE_ID": "rail_16_2",
         "num_points": 11,
-        "length_m": 51196.6
+        "length_m": 51196.6,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Beit Shemesh-Herzliya",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20339,7 +20891,10 @@
       "properties": {
         "LINE_ID": "rail_17_1",
         "num_points": 20,
-        "length_m": 136486.2
+        "length_m": 136486.2,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Rosh Haayin-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20432,7 +20987,10 @@
       "properties": {
         "LINE_ID": "rail_17_2",
         "num_points": 20,
-        "length_m": 136486.2
+        "length_m": 136486.2,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Beer Sheva-Rosh Haayin",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20525,7 +21083,10 @@
       "properties": {
         "LINE_ID": "rail_18_1",
         "num_points": 5,
-        "length_m": 30148.2
+        "length_m": 30148.2,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Modiin-Jerusalem",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20558,7 +21119,10 @@
       "properties": {
         "LINE_ID": "rail_18_2",
         "num_points": 5,
-        "length_m": 30148.2
+        "length_m": 30148.2,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Jerusalem-Modiin",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20591,7 +21155,10 @@
       "properties": {
         "LINE_ID": "rail_19_1",
         "num_points": 7,
-        "length_m": 39469.7
+        "length_m": 39469.7,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Modiin-Ashdod",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20632,7 +21199,10 @@
       "properties": {
         "LINE_ID": "rail_19_2",
         "num_points": 7,
-        "length_m": 39469.7
+        "length_m": 39469.7,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Ashdod-Modiin",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20673,7 +21243,10 @@
       "properties": {
         "LINE_ID": "rail_1_1",
         "num_points": 22,
-        "length_m": 195569.9
+        "length_m": 195569.9,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Kiryat Shmona-Modiin",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20774,7 +21347,10 @@
       "properties": {
         "LINE_ID": "rail_1_2",
         "num_points": 22,
-        "length_m": 195569.9
+        "length_m": 195569.9,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Modiin-Kiryat Shmona",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -20875,7 +21451,10 @@
       "properties": {
         "LINE_ID": "rail_20_1",
         "num_points": 33,
-        "length_m": 190077.0
+        "length_m": 190077.0,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Modiin-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21020,7 +21599,10 @@
       "properties": {
         "LINE_ID": "rail_20_2",
         "num_points": 33,
-        "length_m": 190077.0
+        "length_m": 190077.0,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Beer Sheva-Modiin",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21165,7 +21747,10 @@
       "properties": {
         "LINE_ID": "rail_21_1",
         "num_points": 7,
-        "length_m": 118171.8
+        "length_m": 118171.8,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Jerusalem-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21206,7 +21791,10 @@
       "properties": {
         "LINE_ID": "rail_21_2",
         "num_points": 7,
-        "length_m": 118171.8
+        "length_m": 118171.8,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Beer Sheva-Jerusalem",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21247,7 +21835,10 @@
       "properties": {
         "LINE_ID": "rail_22_1",
         "num_points": 2,
-        "length_m": 38969.2
+        "length_m": 38969.2,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Beer Sheva-Arad",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21268,7 +21859,10 @@
       "properties": {
         "LINE_ID": "rail_22_2",
         "num_points": 2,
-        "length_m": 38969.2
+        "length_m": 38969.2,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Arad-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21289,7 +21883,10 @@
       "properties": {
         "LINE_ID": "rail_23_1",
         "num_points": 3,
-        "length_m": 39073.9
+        "length_m": 39073.9,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Beer Sheva-Yeruham",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21314,7 +21911,10 @@
       "properties": {
         "LINE_ID": "rail_23_2",
         "num_points": 3,
-        "length_m": 39073.9
+        "length_m": 39073.9,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Yeruham-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21339,7 +21939,10 @@
       "properties": {
         "LINE_ID": "rail_2_1",
         "num_points": 10,
-        "length_m": 394961.0
+        "length_m": 394961.0,
+        "Mode": "HighSpeed Rail",
+        "Line_Name": "Nahariya-Eilat",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21392,7 +21995,10 @@
       "properties": {
         "LINE_ID": "rail_2_2",
         "num_points": 10,
-        "length_m": 394961.0
+        "length_m": 394961.0,
+        "Mode": "HighSpeed Rail",
+        "Line_Name": "Eilat-Nahariya",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21445,7 +22051,10 @@
       "properties": {
         "LINE_ID": "rail_3_1",
         "num_points": 26,
-        "length_m": 214636.0
+        "length_m": 214636.0,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Nahariya-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21562,7 +22171,10 @@
       "properties": {
         "LINE_ID": "rail_3_2",
         "num_points": 26,
-        "length_m": 214636.0
+        "length_m": 214636.0,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Beer Sheva-Nahariya",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21679,7 +22291,10 @@
       "properties": {
         "LINE_ID": "rail_4_1",
         "num_points": 25,
-        "length_m": 205977.6
+        "length_m": 205977.6,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Akko-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21792,7 +22407,10 @@
       "properties": {
         "LINE_ID": "rail_4_2",
         "num_points": 25,
-        "length_m": 205977.6
+        "length_m": 205977.6,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Beer Sheva-Akko",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -21905,7 +22523,10 @@
       "properties": {
         "LINE_ID": "rail_5_1",
         "num_points": 23,
-        "length_m": 180825.4
+        "length_m": 180825.4,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Karmiel-Ashkelon",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22010,7 +22631,10 @@
       "properties": {
         "LINE_ID": "rail_5_2",
         "num_points": 23,
-        "length_m": 180825.4
+        "length_m": 180825.4,
+        "Mode": "Interurban Rail",
+        "Line_Name": "Ashkelon-Karmiel",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22115,7 +22739,10 @@
       "properties": {
         "LINE_ID": "rail_6_1",
         "num_points": 6,
-        "length_m": 40930.9
+        "length_m": 40930.9,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Karmiel-Haifa",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22152,7 +22779,10 @@
       "properties": {
         "LINE_ID": "rail_6_2",
         "num_points": 6,
-        "length_m": 40930.9
+        "length_m": 40930.9,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Haifa-Karmiel",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22189,7 +22819,10 @@
       "properties": {
         "LINE_ID": "rail_7_1",
         "num_points": 9,
-        "length_m": 80443.3
+        "length_m": 80443.3,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Tveria-Atlit",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22238,7 +22871,10 @@
       "properties": {
         "LINE_ID": "rail_7_2",
         "num_points": 9,
-        "length_m": 80443.3
+        "length_m": 80443.3,
+        "Mode": "Suburban Rail",
+        "Line_Name": "Atlit-Tveria",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22287,7 +22923,10 @@
       "properties": {
         "LINE_ID": "rail_8_1",
         "num_points": 7,
-        "length_m": 139863.0
+        "length_m": 139863.0,
+        "Mode": "HighSpeed Rail",
+        "Line_Name": "Haifa-Jerusalem",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22328,7 +22967,10 @@
       "properties": {
         "LINE_ID": "rail_8_2",
         "num_points": 7,
-        "length_m": 139863.0
+        "length_m": 139863.0,
+        "Mode": "HighSpeed Rail",
+        "Line_Name": "Jerusalem-Haifa",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22369,7 +23011,10 @@
       "properties": {
         "LINE_ID": "rail_9_1",
         "num_points": 6,
-        "length_m": 181209.1
+        "length_m": 181209.1,
+        "Mode": "HighSpeed Rail",
+        "Line_Name": "Haifa-Beer Sheva",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22406,7 +23051,10 @@
       "properties": {
         "LINE_ID": "rail_9_2",
         "num_points": 6,
-        "length_m": 181209.1
+        "length_m": 181209.1,
+        "Mode": "HighSpeed Rail",
+        "Line_Name": "Beer Sheva-Haifa",
+        "Area": "National"
       },
       "geometry": {
         "type": "LineString",
@@ -22443,7 +23091,10 @@
       "properties": {
         "LINE_ID": "s0110a",
         "num_points": 5,
-        "length_m": 1421.3
+        "length_m": 1421.3,
+        "Mode": "Funicular",
+        "Line_Name": "כרמלית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
@@ -22476,7 +23127,10 @@
       "properties": {
         "LINE_ID": "s0120a",
         "num_points": 5,
-        "length_m": 1449.9
+        "length_m": 1449.9,
+        "Mode": "Funicular",
+        "Line_Name": "כרמלית",
+        "Area": "Haifa"
       },
       "geometry": {
         "type": "LineString",
