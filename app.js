@@ -526,8 +526,18 @@ function rankTableHTML(hubs){
 }
 
 let rankView='ארצי';
+let rankArea='__all__';   // area slicer for מטרופוליני / עירוני (or "all")
 const rankModal=document.getElementById('rankModal');
 const rankBody=document.getElementById('rankBody');
+
+/* Currently visible {title, hubs(sorted)} blocks — shared by render + export. */
+function rankBlocks(){
+  if(rankView==='ארצי')
+    return [{title:'ארצי', hubs:HUBS.filter(h=>h.type==='ארצי')}];
+  return RANK_AREAS
+    .filter(a=>rankArea==='__all__'||rankArea===a.name)
+    .map(a=>({title:a.name, hubs:HUBS.filter(h=>h.type===rankView && a.metros.includes(h.metro))}));
+}
 
 function renderRankTables(){
   const segs=[
@@ -540,27 +550,57 @@ function renderRankTables(){
       <span class="dot" style="background:${s.color}"></span>${s.key}</button>`).join('')}
   </div>`;
 
-  let blocks='';
-  if(rankView==='ארצי'){
-    const hubs=HUBS.filter(h=>h.type==='ארצי');
-    blocks=`<div class="rk-block">
-      <div class="rk-block-h"><span class="t">ארצי</span><span class="ln"></span><span class="c">${hubs.length} מתח״מים</span></div>
-      ${rankTableHTML(hubs)}
-    </div>`;
-  }else{
-    blocks=RANK_AREAS.map(area=>{
-      const hubs=HUBS.filter(h=>h.type===rankView && area.metros.includes(h.metro));
-      return `<div class="rk-block">
-        <div class="rk-block-h"><span class="t">${esc(area.name)}</span><span class="ln"></span><span class="c">${hubs.length} מתח״מים</span></div>
-        ${rankTableHTML(hubs)}
-      </div>`;
+  // area slicer (only for the metro / urban views)
+  let slicer='';
+  if(rankView!=='ארצי'){
+    const opts=[{name:'__all__',label:'הכל'},...RANK_AREAS.map(a=>({name:a.name,label:a.name}))];
+    slicer=opts.map(o=>{
+      const cnt = o.name==='__all__'
+        ? HUBS.filter(h=>h.type===rankView).length
+        : HUBS.filter(h=>h.type===rankView && RANK_AREAS.find(a=>a.name===o.name).metros.includes(h.metro)).length;
+      return `<button class="chip ${rankArea===o.name?'on':''}" data-rkarea="${esc(o.name)}">${esc(o.label)}<span class="cnt">${cnt}</span></button>`;
     }).join('');
   }
-  rankBody.innerHTML=seg+blocks;
-  rankBody.querySelectorAll('[data-rkview]').forEach(b=>b.onclick=()=>{ rankView=b.dataset.rkview; renderRankTables(); });
+  const tools=`<div class="rk-tools">
+    <div class="rk-slicer">${slicer}</div>
+    <button class="rk-export" id="rkExport">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg>
+      ייצוא ל-CSV
+    </button>
+  </div>`;
+
+  const blocks=rankBlocks().map(b=>`<div class="rk-block">
+      <div class="rk-block-h"><span class="t">${esc(b.title)}</span><span class="ln"></span><span class="c">${b.hubs.length} מתח״מים</span></div>
+      ${rankTableHTML(b.hubs)}
+    </div>`).join('');
+
+  rankBody.innerHTML=seg+tools+blocks;
+  rankBody.querySelectorAll('[data-rkview]').forEach(b=>b.onclick=()=>{ rankView=b.dataset.rkview; rankArea='__all__'; renderRankTables(); });
+  rankBody.querySelectorAll('[data-rkarea]').forEach(b=>b.onclick=()=>{ rankArea=b.dataset.rkarea; renderRankTables(); });
+  rankBody.querySelector('#rkExport').onclick=exportRankCSV;
 }
 
-function openRankModal(){ renderRankTables(); rankModal.classList.add('open'); }
+/* Export the currently visible tables to a single CSV (UTF-8 BOM for Excel). */
+function csvCell(v){ const s=String(v==null?'':v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function exportRankCSV(){
+  const head=['סיווג','אזור','דירוג','שם המתח״ם','ביקוש כולל','ציון'];
+  const lines=[head];
+  rankBlocks().forEach(b=>{
+    [...b.hubs].sort((a,b)=>(a.rank||9999)-(b.rank||9999)).forEach((h,i)=>{
+      lines.push([rankView, b.title, i+1, h.name, Math.round(h.demand||0), h.score==null?'':h.score]);
+    });
+  });
+  const csv='﻿'+lines.map(r=>r.map(csvCell).join(',')).join('\r\n');
+  const area = rankView==='ארצי' ? 'ארצי' : (rankArea==='__all__'?rankView:rankView+'-'+rankArea);
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`דירוג-${area}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function openRankModal(){ rankArea='__all__'; renderRankTables(); rankModal.classList.add('open'); }
 function closeRankModal(){ rankModal.classList.remove('open'); }
 document.getElementById('btnRanks').onclick=openRankModal;
 document.getElementById('rankClose').onclick=closeRankModal;
