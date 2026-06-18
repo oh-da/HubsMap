@@ -81,6 +81,7 @@ const state = {
   modes:new Set(MODES),
   demandMin:0,
   rankMax:130,
+  topN:null,        // quick contextual top-N filter (null | 10 | 20)
   selected:null,
   network:false,
 };
@@ -208,6 +209,10 @@ function passes(h){
   if(![...hm].some(m=>state.modes.has(m))) return false;
   if((h.demand||0) < state.demandMin) return false;
   if((h.rank||999) > state.rankMax) return false;
+  // contextual quick filter: top-N within the hub's own ranking group
+  // (national among national, metro/urban within their metro), so e.g. with
+  // only "ארצי" selected, Top 10 shows the 10 highest-ranked national hubs.
+  if(state.topN!=null && (h.gRank||9999) > state.topN) return false;
   return true;
 }
 function applyFilters(){
@@ -338,6 +343,13 @@ function renderRail(){
         <div class="slider-lab"><span>הצג מתח״מים עד דירוג</span><b>${state.rankMax}</b></div>
         <input type="range" id="rankSlider" min="1" max="${RANK_MAX}" step="1" value="${state.rankMax}">
       </div>
+      <div class="slider-row">
+        <div class="slider-lab"><span>סינון מהיר לפי דירוג</span></div>
+        <div class="chips" id="topChips">
+          <button class="chip ${state.topN===10?'on':'off'}" data-top="10">Top 10</button>
+          <button class="chip ${state.topN===20?'on':'off'}" data-top="20">Top 20</button>
+        </div>
+      </div>
     </div>
 
     <div class="sec">
@@ -393,7 +405,18 @@ function wireRail(){
   rail.querySelectorAll('[data-met]').forEach(b=>b.onclick=()=>{ toggleSet(state.metros,b.dataset.met); renderRail(); applyFilters(); });
   rail.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{ toggleSet(state.modes,b.dataset.mode); renderRail(); applyFilters(); });
   const ds=rail.querySelector('#demSlider'); ds.oninput=()=>{ state.demandMin=+ds.value; ds.previousElementSibling.querySelector('b').textContent=fmt(state.demandMin); applyFilters(); };
-  const rs=rail.querySelector('#rankSlider'); rs.oninput=()=>{ state.rankMax=+rs.value; rs.previousElementSibling.querySelector('b').textContent=state.rankMax; applyFilters(); };
+  const rs=rail.querySelector('#rankSlider'); rs.oninput=()=>{
+    state.rankMax=+rs.value;
+    // moving the slider supersedes a quick top-N selection
+    if(state.topN!=null){ state.topN=null; rail.querySelectorAll('[data-top]').forEach(x=>{x.classList.remove('on');x.classList.add('off');}); }
+    rs.previousElementSibling.querySelector('b').textContent=state.rankMax; applyFilters();
+  };
+  rail.querySelectorAll('[data-top]').forEach(b=>b.onclick=()=>{
+    const n=+b.dataset.top;
+    state.topN = (state.topN===n) ? null : n;
+    state.rankMax = RANK_MAX;   // top-N supersedes the manual rank slider
+    renderRail(); applyFilters();
+  });
   rail.querySelectorAll('[data-base]').forEach(b=>b.onclick=()=>setBase(b.dataset.base));
   rail.querySelector('#netToggle').onclick=()=>{ state.network=!state.network; if(state.network) netLayer.addTo(map); else map.removeLayer(netLayer); renderRail(); };
   rail.querySelectorAll('[data-blayer]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); renderRail(); });
