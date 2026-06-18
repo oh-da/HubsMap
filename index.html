@@ -277,6 +277,24 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .rk-seg button .dot{width:9px;height:9px;border-radius:50%}
 .rk-seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
 
+.rk-tools{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.rk-slicer{display:flex;flex-wrap:wrap;gap:7px;flex:1}
+.rk-slicer .chip{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--card);font-size:12.5px;font-weight:700;
+  color:var(--ink-soft);transition:.15s;
+}
+.rk-slicer .chip:hover{border-color:#C2BAA8}
+.rk-slicer .chip.on{color:var(--ink);border-color:var(--ink)}
+.rk-slicer .chip .cnt{font-size:11px;color:var(--ink-mut);font-weight:700;font-variant-numeric:tabular-nums}
+.rk-export{
+  display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:9px;
+  border:1px solid var(--line-2);background:var(--card);color:var(--ink);
+  font-size:12.5px;font-weight:800;white-space:nowrap;transition:.15s;flex:0 0 auto;
+}
+.rk-export:hover{border-color:var(--urban);color:var(--urban)}
+.rk-export svg{width:15px;height:15px}
+
 .rk-block{margin-bottom:24px}
 .rk-block:last-child{margin-bottom:0}
 .rk-block-h{display:flex;align-items:baseline;gap:9px;margin:0 0 10px}
@@ -375,7 +393,7 @@ table.rk td.score{font-variant-numeric:tabular-nums;font-weight:800;color:var(--
 <input type="file" id="geojsonInput" accept=".geojson,.json" style="display:none" />
 
 <script src="vendor/leaflet/leaflet.js"></script>
-<script src="hubs-data.js?v=20260618c"></script>
-<script src="app.js?v=20260618c"></script>
+<script src="hubs-data.js?v=20260618d"></script>
+<script src="app.js?v=20260618d"></script>
 </body>
 </html>
