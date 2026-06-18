@@ -51,5 +51,3 @@ Commit and push — GitHub Pages redeploys automatically.
 - Lines and points render in the chosen color; polygons get a light fill of the
   same color. Reproject to **EPSG:4326** or features land in the wrong place.
 - Keep files reasonably small (simplify large geometries) so the map stays fast.
-- **Remove the demo:** delete `example_demo.geojson` and its entry in
-  `layers.json` once you've added real layers.
