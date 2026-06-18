@@ -87,7 +87,6 @@ const state = {
   rankMax:130,
   topN:null,        // quick contextual top-N filter (null | 10 | 20)
   selected:null,
-  network:false,
 };
 const DEMAND_MAX = Math.max(...HUBS.map(h=>h.demand||0));
 const RANK_MAX   = Math.max(...HUBS.map(h=>h.rank||0));
@@ -103,7 +102,6 @@ const BASES = {
 let curBase='light'; BASES.light.addTo(map);
 
 const overlayPane = map.createPane('hubs'); overlayPane.style.zIndex=620;
-const netPane = map.createPane('net'); netPane.style.zIndex=560;
 const uploadPane = map.createPane('uploads'); uploadPane.style.zIndex=540;
 
 /* ── markers ── */
@@ -124,25 +122,6 @@ const markers = HUBS.map(h=>{
 
 const ALL_BOUNDS = L.latLngBounds(HUBS.map(h=>[h.lat,h.lng])).pad(0.08);
 map.fitBounds(ALL_BOUNDS);
-
-/* ── derived line network ── */
-const netLayer = L.layerGroup([],{pane:'net'});
-(function buildNetwork(){
-  const byLine={};
-  HUBS.forEach(h=>{ splitLines(h.lines).forEach(ln=>{ (byLine[ln]=byLine[ln]||[]).push(h); }); });
-  Object.values(byLine).forEach(group=>{
-    if(group.length<2) return;
-    // greedy nearest-neighbour path from westernmost
-    const pts=[...group].sort((a,b)=>a.lng-b.lng);
-    const path=[pts.shift()];
-    while(pts.length){
-      const last=path[path.length-1]; let bi=0,bd=Infinity;
-      pts.forEach((p,i)=>{ const d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} });
-      path.push(pts.splice(bi,1)[0]);
-    }
-    L.polyline(path.map(p=>[p.lat,p.lng]),{pane:'net',color:'#5a6b7a',weight:2,opacity:.32,lineCap:'round'}).addTo(netLayer);
-  });
-})();
 
 /* ── uploaded layers (persisted) ── */
 const LS_KEY='hubDash.layers.v1';
@@ -387,11 +366,6 @@ function renderRail(){
         <button data-base="dark" class="${curBase==='dark'?'on':''}">כהה</button>
       </div>
       <div style="margin-top:14px">
-        <div class="layer-row">
-          <div class="layer-swatch" style="background:#eef0f1"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#5a6b7a" stroke-width="2"><path d="M3 17 L9 7 L15 15 L21 6"/></svg></div>
-          <div class="ll"><div class="nm">רשת הקווים (משוער)</div><div class="ds">חיבור מתח״מים על קו משותף</div></div>
-          <button class="toggle ${state.network?'on':''}" id="netToggle"></button>
-        </div>
         ${builtinLayers.map(l=>`<div class="layer-row">
           <div class="layer-swatch" style="background:${esc(l.color)}1f"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="${esc(l.color)}" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
           <div class="ll"><div class="nm">${esc(l.name)}</div><div class="ds">שכבה משותפת</div></div>
@@ -432,7 +406,6 @@ function wireRail(){
     renderRail(); applyFilters();
   });
   rail.querySelectorAll('[data-base]').forEach(b=>b.onclick=()=>setBase(b.dataset.base));
-  rail.querySelector('#netToggle').onclick=()=>{ state.network=!state.network; if(state.network) netLayer.addTo(map); else map.removeLayer(netLayer); renderRail(); };
   rail.querySelectorAll('[data-blayer]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); renderRail(); });
   rail.querySelectorAll('[data-ulayer]').forEach(b=>b.onclick=()=>{ const l=userLayers.find(x=>x.id===b.dataset.ulayer); l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); persistUserLayers(); renderRail(); });
   rail.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>removeUserLayer(b.dataset.rm));

@@ -1,14 +1,7 @@
 [
   {
-    "id": "demo",
-    "name": "שכבת דוגמה (למחיקה)",
-    "file": "example_demo.geojson",
-    "color": "#2E7D6B",
-    "visible": false
-  },
-  {
     "id": "lines",
-    "name": "קווים (LINE_ID)",
+    "name": "רשת קווי המתע\"ן",
     "file": "lines.geojson",
     "color": "#B0432B",
     "visible": false
