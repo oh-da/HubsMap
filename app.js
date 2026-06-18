@@ -16,6 +16,10 @@ const CLS_MAP = Object.fromEntries(CLASSES.map(c=>[c.key,c]));
    stays visible and filterable instead of being silently dropped. */
 const METRO_ORDER = ["תל אביב","חיפה","ירושלים","באר שבע","צפון"];
 const MODE_ORDER  = ['רק"ל','BRT','מטרו','רכבת פרברית','רכבת בינעירונית','רכבת מהירה','Cable Line','פוניקולר'];
+/* Display-only aliases for transport modes. The raw value (kept in the data and
+   used for filtering) stays the same; only the label shown to the user changes. */
+const MODE_LABELS = { 'Cable Line':'רכבלית', 'פוניקולר':'כרמלית' };
+const modeLabel = m => MODE_LABELS[m] || m;
 function withExtras(order, values){
   const extra = [...new Set(values)].filter(v => v && !order.includes(v));
   return [...order, ...extra];
@@ -231,21 +235,32 @@ function applyFilters(){
 
 /* ── detail drawer ── */
 const detailEl=document.getElementById('detail');
-function radiusBars(h){
+function radiusCharts(h){
   const rings=[
     {l:'0–500 מ׳',  pop:h.pop_0_500,    emp:h.emp_0_500},
     {l:'500–1,000 מ׳',pop:h.pop_500_1000, emp:h.emp_500_1000},
     {l:'1,000–1,500 מ׳',pop:h.pop_1000_1500,emp:h.emp_1000_1500},
   ];
-  const maxT=Math.max(...rings.map(r=>(r.pop||0)+(r.emp||0)),1);
-  return rings.map(r=>{
-    const tot=(r.pop||0)+(r.emp||0); const w=(tot/maxT)*100;
-    const pp=tot?(r.pop/tot)*100:0, ep=tot?(r.emp/tot)*100:0;
-    return `<div class="radius-row">
-      <div class="rl"><span>${r.l}</span><b>${fmt(tot)}</b></div>
-      <div class="bar" style="width:${Math.max(w,8)}%"><i class="pop" style="width:${pp}%"></i><i class="emp" style="width:${ep}%"></i></div>
+  // Each metric gets its own chart, scaled independently against its own max.
+  const chart=(key,cls)=>{
+    const max=Math.max(...rings.map(r=>r[key]||0),1);
+    return rings.map(r=>{
+      const v=r[key]||0; const w=v?Math.max((v/max)*100,2):0;
+      return `<div class="radius-row">
+        <div class="rl"><span>${r.l}</span><b>${fmt(v)}</b></div>
+        <div class="bar"><i class="${cls}" style="width:${w}%"></i></div>
+      </div>`;
+    }).join('');
+  };
+  return `
+    <div class="radii-chart">
+      <div class="radii-title"><i style="background:#3E769E"></i>אוכלוסייה</div>
+      <div class="radii">${chart('pop','pop')}</div>
+    </div>
+    <div class="radii-chart">
+      <div class="radii-title"><i style="background:#DD9326"></i>מועסקים</div>
+      <div class="radii">${chart('emp','emp')}</div>
     </div>`;
-  }).join('');
 }
 function openDetail(h){
   state.selected=h;
@@ -276,13 +291,12 @@ function openDetail(h){
 
       <div class="dt-sec">
         <div class="h">אמצעים מתוכננים</div>
-        <div class="mode-chips">${modes.map(m=>`<span class="mode-chip">${esc(m)}</span>`).join('')}</div>
+        <div class="mode-chips">${modes.map(m=>`<span class="mode-chip">${esc(modeLabel(m))}</span>`).join('')}</div>
       </div>
 
       <div class="dt-sec">
-        <div class="h">צפיפות בסביבת המתח״ם · 2050</div>
-        <div class="radii">${radiusBars(h)}</div>
-        <div class="radii-leg"><span><i style="background:#3E769E"></i>אוכלוסייה</span><span><i style="background:#DD9326"></i>תעסוקה</span></div>
+        <div class="h">אוכלוסייה ומועסקים בסביבת המתח״ם - 2050</div>
+        ${radiusCharts(h)}
       </div>
 
       <div class="dt-sec">
@@ -329,7 +343,7 @@ function renderRail(){
     <div class="sec">
       <div class="sec-h"><span class="t">אמצעי תחבורה</span><span class="ln"></span></div>
       <div class="chips" id="modeChips">
-        ${MODES.map(m=>`<button class="chip ${state.modes.has(m)?'on':'off'}" data-mode="${escA(m)}">${m}</button>`).join('')}
+        ${MODES.map(m=>`<button class="chip ${state.modes.has(m)?'on':'off'}" data-mode="${escA(m)}">${esc(modeLabel(m))}</button>`).join('')}
       </div>
     </div>
 
