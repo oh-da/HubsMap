@@ -155,11 +155,50 @@ function removeUserLayer(id){
    Defined in layers/layers.json and committed to the repo, so every viewer
    sees the same layers (unlike uploads, which stay in one browser).
    Manifest entry: { "id", "name", "file", "color", "visible" }. ── */
-let builtinLayers=[]; // {id,name,color,visible,leaf}
+let builtinLayers=[]; // {id,name,color,visible,leaf,gj,modes,modeState}
 const hasFill = f => !!(f && f.geometry && /Polygon/.test(f.geometry.type));
 function styleBuiltin(color){
   return f => ({pane:'uploads',color,weight:2.4,opacity:.9,fillColor:color,fillOpacity:hasFill(f)?.14:0});
 }
+
+/* Lines that carry a `Mode` property render in black, encoding the planned mode
+   as stroke width (thicker = higher-capacity mode). Anything outside the table
+   below (Cable Line, Funicular, Unknown…) falls back to the thinnest tier. */
+const LINE_MODE_ORDER = ['HighSpeed Rail','Interurban Rail','Suburban Rail','Metro','LRT','BRT','Cable Line','Funicular'];
+const LINE_MODE_WIDTH = {
+  'HighSpeed Rail':8, 'Interurban Rail':6, 'Suburban Rail':4.5, 'Metro':4.5, 'LRT':3, 'BRT':2,
+};
+const LINE_WIDTH_MIN = 1.2;
+const lineMode  = f => (f && f.properties && f.properties.Mode) || 'Unknown';
+const lineWidth = m => LINE_MODE_WIDTH[m] || LINE_WIDTH_MIN;
+function styleLines(f){
+  return {pane:'uploads', color:'#111', weight:lineWidth(lineMode(f)), opacity:.85, fillOpacity:0};
+}
+function orderModes(modes){
+  return [...modes].sort((a,b)=>{
+    const ia=LINE_MODE_ORDER.indexOf(a), ib=LINE_MODE_ORDER.indexOf(b);
+    return (ia<0?99:ia)-(ib<0?99:ib) || a.localeCompare(b);
+  });
+}
+
+/* Build the Leaflet layer for a built-in entry. A mode-aware layer (one whose
+   features carry `Mode`) is styled by width and filtered by `modeState`; any
+   other layer keeps the generic single-colour style. */
+function buildBuiltinLeaf(layer){
+  const {gj,color,modes,modeState}=layer;
+  if(modes){
+    return L.geoJSON(gj,{
+      pane:'uploads',
+      filter:f=>modeState.has(lineMode(f)),
+      style:styleLines,
+    });
+  }
+  return L.geoJSON(gj,{
+    pane:'uploads', style:styleBuiltin(color),
+    pointToLayer:(f,ll)=>L.circleMarker(ll,{pane:'uploads',radius:4,color,weight:2,fillColor:'#fff',fillOpacity:1})
+  });
+}
+
 async function loadBuiltinLayers(){
   let manifest=[];
   try{ const r=await fetch('layers/layers.json',{cache:'no-cache'}); if(r.ok) manifest=await r.json(); }
@@ -171,17 +210,28 @@ async function loadBuiltinLayers(){
       const r=await fetch('layers/'+m.file,{cache:'no-cache'}); if(!r.ok) continue;
       const gj=await r.json();
       const color=m.color||'#2E7D6B';
-      const leaf=L.geoJSON(gj,{
-        pane:'uploads', style:styleBuiltin(color),
-        pointToLayer:(f,ll)=>L.circleMarker(ll,{pane:'uploads',radius:4,color,weight:2,fillColor:'#fff',fillOpacity:1})
-      });
+      const feats=(gj&&gj.features)||[];
+      // Mode-aware only if at least one feature has a Mode; features missing it
+      // collapse to "Unknown" so they stay filterable rather than vanishing.
+      const hasModes=feats.some(f=>f&&f.properties&&f.properties.Mode);
+      const modes=hasModes ? orderModes(new Set(feats.map(lineMode))) : null;
       const visible=m.visible!==false;
-      const layer={id:m.id||('B'+Math.random().toString(36).slice(2,8)), name:m.name||m.file, color, visible, leaf};
+      const layer={id:m.id||('B'+Math.random().toString(36).slice(2,8)),
+                   name:m.name||m.file, color, visible, gj,
+                   modes, modeState:new Set(modes||[])};
+      layer.leaf=buildBuiltinLeaf(layer);
       builtinLayers.push(layer);
-      if(visible) leaf.addTo(map);
+      if(visible) layer.leaf.addTo(map);
     }catch(e){ /* skip a bad layer, keep the rest */ }
   }
   renderRail();
+}
+
+/* Rebuild a layer's geometry in place (used when its mode filter changes). */
+function refreshBuiltinLeaf(layer){
+  if(map.hasLayer(layer.leaf)) map.removeLayer(layer.leaf);
+  layer.leaf=buildBuiltinLeaf(layer);
+  if(layer.visible) layer.leaf.addTo(map);
 }
 
 /* ── filtering ── */
@@ -301,6 +351,23 @@ window.closeDetail=closeDetail; window.focusHub=focusHub;
 const rail=document.getElementById('rail');
 function clsCounts(){ const m={}; HUBS.forEach(h=>m[h.type]=(m[h.type]||0)+1); return m; }
 function metroCounts(){ const m={}; HUBS.forEach(h=>m[h.metro]=(m[h.metro]||0)+1); return m; }
+/* A built-in shared-layer row, plus — for a mode-aware layer that is switched
+   on — a per-mode filter whose chips double as a width legend (the black bar in
+   each chip is as thick as that mode draws on the map). */
+function builtinLayerHTML(l){
+  const dc = l.modes ? '#111' : l.color;
+  const row = `<div class="layer-row">
+          <div class="layer-swatch" style="background:${esc(dc)}1f"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="${esc(dc)}" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
+          <div class="ll"><div class="nm">${esc(l.name)}</div><div class="ds">שכבה משותפת</div></div>
+          <button class="toggle ${l.visible?'on':''}" data-blayer="${esc(l.id)}"></button>
+        </div>`;
+  if(!l.modes || !l.visible) return row;
+  const chips = l.modes.map(m=>`<button class="chip lmode ${l.modeState.has(m)?'on':'off'}" data-blayer="${esc(l.id)}" data-linemode="${escA(m)}"><span class="lw" style="height:${lineWidth(m)}px"></span>${esc(m)}</button>`).join('');
+  return row + `<div class="lmode-filter">
+          <div class="lmode-h">סינון לפי אמצעי · עובי הקו = האמצעי</div>
+          <div class="chips">${chips}</div>
+        </div>`;
+}
 function renderRail(){
   const cc=clsCounts(), mc=metroCounts();
   rail.innerHTML=`
@@ -366,11 +433,7 @@ function renderRail(){
         <button data-base="dark" class="${curBase==='dark'?'on':''}">כהה</button>
       </div>
       <div style="margin-top:14px">
-        ${builtinLayers.map(l=>`<div class="layer-row">
-          <div class="layer-swatch" style="background:${esc(l.color)}1f"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="${esc(l.color)}" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
-          <div class="ll"><div class="nm">${esc(l.name)}</div><div class="ds">שכבה משותפת</div></div>
-          <button class="toggle ${l.visible?'on':''}" data-blayer="${esc(l.id)}"></button>
-        </div>`).join('')}
+        ${builtinLayers.map(builtinLayerHTML).join('')}
         ${userLayers.map(l=>`<div class="layer-row">
           <div class="layer-swatch" style="background:#f1ecf6"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#7A3FB0" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
           <div class="ll"><div class="nm">${esc(l.name)}</div><div class="ds">שכבה שהועלתה</div></div>
@@ -406,7 +469,8 @@ function wireRail(){
     renderRail(); applyFilters();
   });
   rail.querySelectorAll('[data-base]').forEach(b=>b.onclick=()=>setBase(b.dataset.base));
-  rail.querySelectorAll('[data-blayer]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); renderRail(); });
+  rail.querySelectorAll('.toggle[data-blayer]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); renderRail(); });
+  rail.querySelectorAll('[data-linemode]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; toggleSet(l.modeState,b.dataset.linemode); refreshBuiltinLeaf(l); renderRail(); });
   rail.querySelectorAll('[data-ulayer]').forEach(b=>b.onclick=()=>{ const l=userLayers.find(x=>x.id===b.dataset.ulayer); l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); persistUserLayers(); renderRail(); });
   rail.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>removeUserLayer(b.dataset.rm));
   rail.querySelector('#uploadBtn').onclick=()=>document.getElementById('geojsonInput').click();
