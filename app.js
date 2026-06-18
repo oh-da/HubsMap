@@ -494,6 +494,79 @@ document.getElementById('btnZin').onclick=()=>map.zoomIn();
 document.getElementById('btnZout').onclick=()=>map.zoomOut();
 map.on('click',e=>{ if(!e.originalEvent.target.closest('.leaflet-interactive')) closeDetail(); });
 
+/* ── ranking tables modal ──
+   One table for "ארצי" (all national hubs). For "מטרופוליני" and "עירוני" the
+   four areas aggregate neighbouring metros:
+     חיפה = חיפה + צפון · באר שבע = באר שבע + מחוז דרום · תל אביב · ירושלים.
+   Each table is ranked 1..N within its own group (by Overall_Rank). ── */
+const RANK_AREAS = [
+  { name:'תל אביב', metros:['תל אביב'] },
+  { name:'חיפה',    metros:['חיפה','צפון'] },
+  { name:'ירושלים', metros:['ירושלים'] },
+  { name:'באר שבע', metros:['באר שבע','מחוז דרום'] },
+];
+const fmtScore = s => (s==null||isNaN(s)) ? '—' : s.toFixed(2);
+
+function rankTableHTML(hubs){
+  const rows=[...hubs].sort((a,b)=>(a.rank||9999)-(b.rank||9999));
+  if(!rows.length) return `<div class="rk-empty">אין מתח״מים בקבוצה זו</div>`;
+  return `<table class="rk">
+    <thead><tr>
+      <th>דירוג</th><th>שם המתח״ם</th><th>ביקוש כולל</th><th>ציון</th>
+    </tr></thead>
+    <tbody>
+      ${rows.map((h,i)=>`<tr>
+        <td class="rank">${i+1}</td>
+        <td class="name">${esc(h.name)}</td>
+        <td class="num">${fmt(h.demand)}</td>
+        <td class="score">${fmtScore(h.score)}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+let rankView='ארצי';
+const rankModal=document.getElementById('rankModal');
+const rankBody=document.getElementById('rankBody');
+
+function renderRankTables(){
+  const segs=[
+    {key:'ארצי',color:CLS_MAP['ארצי'].color},
+    {key:'מטרופוליני',color:CLS_MAP['מטרופוליני'].color},
+    {key:'עירוני',color:CLS_MAP['עירוני'].color},
+  ];
+  const seg=`<div class="rk-seg" id="rkSeg">
+    ${segs.map(s=>`<button class="${rankView===s.key?'on':''}" data-rkview="${s.key}">
+      <span class="dot" style="background:${s.color}"></span>${s.key}</button>`).join('')}
+  </div>`;
+
+  let blocks='';
+  if(rankView==='ארצי'){
+    const hubs=HUBS.filter(h=>h.type==='ארצי');
+    blocks=`<div class="rk-block">
+      <div class="rk-block-h"><span class="t">ארצי</span><span class="ln"></span><span class="c">${hubs.length} מתח״מים</span></div>
+      ${rankTableHTML(hubs)}
+    </div>`;
+  }else{
+    blocks=RANK_AREAS.map(area=>{
+      const hubs=HUBS.filter(h=>h.type===rankView && area.metros.includes(h.metro));
+      return `<div class="rk-block">
+        <div class="rk-block-h"><span class="t">${esc(area.name)}</span><span class="ln"></span><span class="c">${hubs.length} מתח״מים</span></div>
+        ${rankTableHTML(hubs)}
+      </div>`;
+    }).join('');
+  }
+  rankBody.innerHTML=seg+blocks;
+  rankBody.querySelectorAll('[data-rkview]').forEach(b=>b.onclick=()=>{ rankView=b.dataset.rkview; renderRankTables(); });
+}
+
+function openRankModal(){ renderRankTables(); rankModal.classList.add('open'); }
+function closeRankModal(){ rankModal.classList.remove('open'); }
+document.getElementById('btnRanks').onclick=openRankModal;
+document.getElementById('rankClose').onclick=closeRankModal;
+rankModal.addEventListener('click',e=>{ if(e.target===rankModal) closeRankModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && rankModal.classList.contains('open')) closeRankModal(); });
+
 /* ── init ── */
 loadUserLayers();
 renderRail();

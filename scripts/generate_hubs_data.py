@@ -55,6 +55,8 @@ def build_hub(row):
         # ranking & demand
         "rank": int(row["Overall_Rank"]) if row.get("Overall_Rank") is not None else None,
         "demand": num(row.get("TotalDemand"), 2),
+        # multi-criteria priority score that drives Overall_Rank (higher = better)
+        "score": num(row.get("Average_Simulated_Score"), 3),
         "logDemand": num(row.get("LogDemand"), 4),
         # modes & lines
         "numModes": int(row["Num_Modes"]) if row.get("Num_Modes") is not None else 0,
