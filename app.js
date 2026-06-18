@@ -16,6 +16,10 @@ const CLS_MAP = Object.fromEntries(CLASSES.map(c=>[c.key,c]));
    stays visible and filterable instead of being silently dropped. */
 const METRO_ORDER = ["תל אביב","חיפה","ירושלים","באר שבע","צפון"];
 const MODE_ORDER  = ['רק"ל','BRT','מטרו','רכבת פרברית','רכבת בינעירונית','רכבת מהירה','Cable Line','פוניקולר'];
+/* Display-only aliases for transport modes. The raw value (kept in the data and
+   used for filtering) stays the same; only the label shown to the user changes. */
+const MODE_LABELS = { 'Cable Line':'רכבלית', 'פוניקולר':'כרמלית' };
+const modeLabel = m => MODE_LABELS[m] || m;
 function withExtras(order, values){
   const extra = [...new Set(values)].filter(v => v && !order.includes(v));
   return [...order, ...extra];
@@ -250,7 +254,6 @@ function radiusBarsMetric(h,key,color){
       <div class="rl"><span>${r.l}</span><b>${fmt(v)}</b></div>
       <div class="bar" style="width:${Math.max(w,8)}%"><i style="width:100%;background:${color}"></i></div>
     </div>`;
-  }).join('');
 }
 function openDetail(h){
   state.selected=h;
