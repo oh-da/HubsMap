@@ -233,9 +233,79 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .dt-focus{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border:1px solid var(--line-2);border-radius:11px;background:var(--paper);font-size:12.5px;font-weight:800;color:var(--ink);transition:.15s}
 .dt-focus:hover{background:var(--paper-2)}
 
+/* ── Ranking tables ─────────────────────── */
+.rank-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 15px;border-radius:10px;border:1px solid var(--line-2);
+  background:var(--card);color:var(--ink);font-size:13px;font-weight:800;
+  box-shadow:var(--shadow);transition:.15s;
+}
+.rank-btn:hover{border-color:var(--national);color:var(--national)}
+.rank-btn svg{width:17px;height:17px}
+
+.modal-back{
+  position:fixed;inset:0;z-index:1000;background:rgba(27,25,21,.45);
+  backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;
+  padding:38px 22px;overflow-y:auto;
+}
+.modal-back.open{display:flex}
+.modal{
+  background:var(--paper);border:1px solid var(--line);border-radius:18px;
+  box-shadow:var(--shadow-lg);width:min(940px,100%);display:flex;flex-direction:column;
+  overflow:hidden;margin:auto;
+}
+.modal-head{
+  display:flex;align-items:center;gap:14px;padding:19px 24px;
+  background:var(--card);border-bottom:1px solid var(--line);position:relative;
+}
+.modal-head .k{font-size:10px;letter-spacing:.14em;color:var(--ink-mut);font-weight:700;text-transform:uppercase}
+.modal-head h2{margin:2px 0 0;font-family:"Frank Ruhl Libre",serif;font-weight:900;font-size:23px;letter-spacing:-.01em}
+.modal-close{
+  position:absolute;top:16px;left:18px;width:32px;height:32px;border-radius:9px;
+  background:var(--paper-2);border:1px solid var(--line);color:var(--ink-soft);
+  display:grid;place-items:center;transition:.15s;
+}
+.modal-close:hover{background:#ece6da;color:var(--ink)}
+.modal-body{padding:20px 24px 26px;overflow-y:auto;max-height:calc(100vh - 200px)}
+
+.rk-seg{display:flex;gap:5px;background:var(--paper-2);padding:5px;border-radius:11px;margin-bottom:20px}
+.rk-seg button{
+  flex:1;border:none;background:transparent;border-radius:8px;padding:9px 6px;
+  font-size:13px;font-weight:800;color:var(--ink-soft);transition:.15s;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+}
+.rk-seg button .dot{width:9px;height:9px;border-radius:50%}
+.rk-seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+
+.rk-block{margin-bottom:24px}
+.rk-block:last-child{margin-bottom:0}
+.rk-block-h{display:flex;align-items:baseline;gap:9px;margin:0 0 10px}
+.rk-block-h .t{font-family:"Frank Ruhl Libre",serif;font-size:18px;font-weight:900;color:var(--ink)}
+.rk-block-h .c{font-size:12px;color:var(--ink-mut);font-weight:700}
+.rk-block-h .ln{flex:1;height:1px;background:var(--line);align-self:center}
+
+table.rk{width:100%;border-collapse:collapse;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;overflow:hidden}
+table.rk th,table.rk td{padding:10px 14px;text-align:right;font-size:13px}
+table.rk thead th{
+  background:var(--paper-2);color:var(--ink-mut);font-weight:800;font-size:11px;
+  letter-spacing:.03em;border-bottom:1px solid var(--line);white-space:nowrap;
+}
+table.rk tbody tr{border-bottom:1px solid var(--line)}
+table.rk tbody tr:last-child{border-bottom:0}
+table.rk tbody tr:hover{background:var(--paper)}
+table.rk td.rank{font-family:"Frank Ruhl Libre",serif;font-weight:900;font-size:16px;
+  color:var(--national);width:54px;font-variant-numeric:tabular-nums}
+table.rk td.name{font-weight:700;color:var(--ink)}
+table.rk td.num{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink-soft);width:108px}
+table.rk td.score{font-variant-numeric:tabular-nums;font-weight:800;color:var(--ink);width:84px}
+.rk-empty{padding:18px;text-align:center;color:var(--ink-mut);font-weight:700;font-size:13px;
+  background:var(--card);border:1px dashed var(--line-2);border-radius:12px}
+
 @media (max-width:560px){
   .rail{display:none}
   .detail{width:100%}
+  .rank-btn span{display:none}
 }
 </style>
 </head>
@@ -251,6 +321,11 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
       <h1 class="serif">תיעדוף מתח"מים - מיפוי</h1>
     </div>
     <div class="mast-spacer"></div>
+    <button class="rank-btn" id="btnRanks" title="טבלאות דירוג">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M3 14.5h18M9 4v16"/></svg>
+      <span>טבלאות דירוג</span>
+    </button>
+    <div class="mast-div"></div>
     <div class="mast-meta" id="mastMeta"></div>
   </header>
 
@@ -282,10 +357,25 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
   </div>
 </div>
 
+<div class="modal-back" id="rankModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="טבלאות דירוג">
+    <div class="modal-head">
+      <div>
+        <div class="k">תיעדוף מתח״מים</div>
+        <h2 class="serif">טבלאות דירוג</h2>
+      </div>
+      <button class="modal-close" id="rankClose" aria-label="סגור">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="rankBody"></div>
+  </div>
+</div>
+
 <input type="file" id="geojsonInput" accept=".geojson,.json" style="display:none" />
 
 <script src="vendor/leaflet/leaflet.js"></script>
-<script src="hubs-data.js?v=20260618"></script>
-<script src="app.js?v=20260618b"></script>
+<script src="hubs-data.js?v=20260618c"></script>
+<script src="app.js?v=20260618c"></script>
 </body>
 </html>
