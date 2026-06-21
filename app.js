@@ -494,6 +494,30 @@ document.getElementById('btnZin').onclick=()=>map.zoomIn();
 document.getElementById('btnZout').onclick=()=>map.zoomOut();
 map.on('click',e=>{ if(!e.originalEvent.target.closest('.leaflet-interactive')) closeDetail(); });
 
+/* ── responsive rail drawer ──
+   On phones/tablets the rail is an off-canvas drawer (see media query in
+   index.html) toggled by the masthead hamburger, so the map always keeps the
+   full width instead of being squeezed to an unusable sliver. ── */
+const navToggle=document.getElementById('navToggle');
+const railBackdrop=document.getElementById('railBackdrop');
+function setRailOpen(open){
+  rail.parentElement.classList.toggle('open',open); // .rail aside wraps #rail
+  railBackdrop.classList.toggle('show',open);
+  navToggle.setAttribute('aria-expanded',open?'true':'false');
+}
+navToggle.onclick=()=>setRailOpen(!rail.parentElement.classList.contains('open'));
+railBackdrop.onclick=()=>setRailOpen(false);
+
+/* Keep Leaflet's canvas in sync with viewport / orientation changes, and drop
+   the drawer state once we're back at desktop widths. */
+let _rszT;
+function onViewportChange(){
+  if(window.innerWidth>768) setRailOpen(false);
+  clearTimeout(_rszT); _rszT=setTimeout(()=>map.invalidateSize(),120);
+}
+window.addEventListener('resize',onViewportChange);
+window.addEventListener('orientationchange',onViewportChange);
+
 /* ── ranking tables modal ──
    One table for "ארצי" (all national hubs). For "מטרופוליני" and "עירוני" the
    four areas aggregate neighbouring metros:
@@ -612,3 +636,8 @@ loadUserLayers();
 renderRail();
 applyFilters();
 loadBuiltinLayers();
+
+/* Safety net: re-measure once layout/fonts have settled so the map fills its
+   container on first paint (notably on mobile, where the address bar shifts
+   the viewport height after load). */
+window.addEventListener('load',()=>{ map.invalidateSize(); map.fitBounds(ALL_BOUNDS); });
