@@ -95,9 +95,24 @@ The site is published with one shareable link via GitHub Pages:
    Actions"** (one-time).
 2. Merge to `main`. The [`deploy-pages.yml`](.github/workflows/deploy-pages.yml)
    workflow builds and deploys automatically on every push to `main`.
-3. Share the resulting URL — `https://oh-da.github.io/HubsMap/`.
+3. Share the URL — `https://hubsmap.ohad.pro/`.
 
 Every later push to `main` (new data, new layers) redeploys automatically.
 Since this is a purely client-side site, **all hub data is downloadable by
 anyone who can open the link** — a GitHub Pages site is public. Don't publish
 data here that shouldn't be public.
+
+### Custom domain
+
+The site is served from `hubsmap.ohad.pro`. Two things make that work:
+
+- The [`CNAME`](CNAME) file at the repo root. The deploy workflow uploads the
+  whole repo (`path: '.'`), so this file ships with every deploy and the domain
+  survives redeploys.
+- A DNS `CNAME` record at the registrar (GoDaddy, on `ohad.pro`):
+  `hubsmap` → `oh-da.github.io`.
+
+After DNS propagates, set **Settings → Pages → Custom domain** to
+`hubsmap.ohad.pro` and tick **Enforce HTTPS** once the certificate is issued.
+To change the domain later, edit the `CNAME` file and the DNS record together —
+changing only one of them takes the site offline.
