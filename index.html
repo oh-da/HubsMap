@@ -164,6 +164,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 /* Map */
 .map-wrap{flex:1;position:relative;min-width:0}
 #map{position:absolute;inset:0;background:#E8E4DC}
+/* OSM tiles are full-color; CSS filters turn them into light-gray / muted / dark bases */
+.base-light{filter:grayscale(1) brightness(1.07) contrast(.92)}
+.base-gray{filter:grayscale(1) brightness(1.16) contrast(.78)}
+.base-dark{filter:grayscale(1) invert(1) brightness(.9) contrast(.88)}
 .map-overlay{position:absolute;z-index:500;pointer-events:none}
 .map-overlay > *{pointer-events:auto}
 .map-title{

@@ -94,10 +94,12 @@ state.rankMax = RANK_MAX;
 
 /* ── map ── */
 const map = L.map('map',{zoomControl:false,attributionControl:true,minZoom:7,maxZoom:16}).setView([32.05,34.95],9);
+const OSM_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const OSM_ATTR='© OpenStreetMap contributors';
 const BASES = {
-  light:L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,attribution:'© OpenStreetMap © CARTO'}),
-  gray :L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,attribution:'© OpenStreetMap © CARTO'}),
-  dark :L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,attribution:'© OpenStreetMap © CARTO'}),
+  light:L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-light'}),
+  gray :L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-gray'}),
+  dark :L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-dark'}),
 };
 let curBase='light'; BASES.light.addTo(map);
 
