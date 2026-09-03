@@ -96,12 +96,7 @@ state.rankMax = RANK_MAX;
 const map = L.map('map',{zoomControl:false,attributionControl:true,minZoom:7,maxZoom:16}).setView([32.05,34.95],9);
 const OSM_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const OSM_ATTR='© OpenStreetMap contributors';
-const BASES = {
-  light:L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-light'}),
-  gray :L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-gray'}),
-  dark :L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-dark'}),
-};
-let curBase='light'; BASES.light.addTo(map);
+L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-light'}).addTo(map);
 
 const overlayPane = map.createPane('hubs'); overlayPane.style.zIndex=620;
 const uploadPane = map.createPane('uploads'); uploadPane.style.zIndex=540;
@@ -429,12 +424,7 @@ function renderRail(){
 
     <div class="sec">
       <div class="sec-h"><span class="t">שכבות רקע</span><span class="ln"></span></div>
-      <div class="seg" id="baseSeg">
-        <button data-base="light" class="${curBase==='light'?'on':''}">בהיר</button>
-        <button data-base="gray" class="${curBase==='gray'?'on':''}">אפור</button>
-        <button data-base="dark" class="${curBase==='dark'?'on':''}">כהה</button>
-      </div>
-      <div style="margin-top:14px">
+      <div>
         ${builtinLayers.map(builtinLayerHTML).join('')}
         ${userLayers.map(l=>`<div class="layer-row">
           <div class="layer-swatch" style="background:#f1ecf6"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#7A3FB0" stroke-width="2"><path d="M4 18 L10 9 L14 14 L20 5"/></svg></div>
@@ -470,7 +460,6 @@ function wireRail(){
     state.rankMax = RANK_MAX;   // top-N supersedes the manual rank slider
     renderRail(); applyFilters();
   });
-  rail.querySelectorAll('[data-base]').forEach(b=>b.onclick=()=>setBase(b.dataset.base));
   rail.querySelectorAll('.toggle[data-blayer]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); renderRail(); });
   rail.querySelectorAll('[data-linemode]').forEach(b=>b.onclick=()=>{ const l=builtinLayers.find(x=>x.id===b.dataset.blayer); if(!l)return; toggleSet(l.modeState,b.dataset.linemode); refreshBuiltinLeaf(l); renderRail(); });
   rail.querySelectorAll('[data-ulayer]').forEach(b=>b.onclick=()=>{ const l=userLayers.find(x=>x.id===b.dataset.ulayer); l.visible=!l.visible; if(l.visible)l.leaf.addTo(map); else map.removeLayer(l.leaf); persistUserLayers(); renderRail(); });
@@ -478,7 +467,6 @@ function wireRail(){
   rail.querySelector('#uploadBtn').onclick=()=>document.getElementById('geojsonInput').click();
 }
 function toggleSet(set,v){ set.has(v)?set.delete(v):set.add(v); }
-function setBase(b){ if(b===curBase)return; map.removeLayer(BASES[curBase]); curBase=b; BASES[b].addTo(map); renderRail(); }
 
 /* ── geojson upload ── */
 document.getElementById('geojsonInput').addEventListener('change',e=>{
