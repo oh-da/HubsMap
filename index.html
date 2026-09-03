@@ -150,9 +150,6 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .lmode-filter .lmode-h{font-size:11px;font-weight:700;color:var(--ink-mut);margin:0 0 9px}
 .chip.lmode .lw{width:17px;min-height:2px;background:#111;border-radius:2px;flex:0 0 auto}
 .chip.lmode.off .lw{opacity:.55}
-.seg{display:flex;gap:4px;background:var(--paper-2);padding:4px;border-radius:10px}
-.seg button{flex:1;border:none;background:transparent;border-radius:7px;padding:7px 4px;font-size:12px;font-weight:700;color:var(--ink-soft);transition:.15s}
-.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
 .upload-btn{
   display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;
   padding:11px;border:1.5px dashed var(--line-2);border-radius:11px;background:var(--card);
@@ -164,6 +161,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 /* Map */
 .map-wrap{flex:1;position:relative;min-width:0}
 #map{position:absolute;inset:0;background:#E8E4DC}
+/* OSM tiles are full-color; the filter turns them into a light-gray base */
+.base-light{filter:grayscale(1) brightness(1.07) contrast(.92)}
 .map-overlay{position:absolute;z-index:500;pointer-events:none}
 .map-overlay > *{pointer-events:auto}
 .map-title{
