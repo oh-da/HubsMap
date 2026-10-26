@@ -520,13 +520,14 @@ const RANK_AREAS = [
   { name:'באר שבע', metros:['באר שבע','מחוז דרום'] },
 ];
 const fmtScore = s => (s==null||isNaN(s)) ? '—' : s.toFixed(2);
+const fmtModes = h => { const m=hubModes(h).map(modeLabel); return m.length ? `${m.join(', ')} (${h.numModes??m.length})` : '—'; };
 
 function rankTableHTML(hubs){
   const rows=[...hubs].sort((a,b)=>(a.rank||9999)-(b.rank||9999));
   if(!rows.length) return `<div class="rk-empty">אין מתח״מים בקבוצה זו</div>`;
   return `<table class="rk">
     <thead><tr>
-      <th>דירוג</th><th>שם המתח״ם</th><th>ביקוש כולל</th><th>ציון</th>
+      <th>דירוג</th><th>שם המתח״ם</th><th>ביקוש כולל</th><th>ציון</th><th>אמצעי מתע״ן (מס׳)</th>
     </tr></thead>
     <tbody>
       ${rows.map((h,i)=>`<tr>
@@ -534,6 +535,7 @@ function rankTableHTML(hubs){
         <td class="name">${esc(h.name)}</td>
         <td class="num">${fmt(h.demand)}</td>
         <td class="score">${fmtScore(h.score)}</td>
+        <td class="modes">${hubModes(h).length ? `<bdi>${esc(hubModes(h).map(modeLabel).join(', '))}</bdi> <span class="cnt">(${h.numModes??hubModes(h).length})</span>` : '—'}</td>
       </tr>`).join('')}
     </tbody>
   </table>`;
@@ -597,11 +599,11 @@ function renderRankTables(){
 /* Export the currently visible tables to a single CSV (UTF-8 BOM for Excel). */
 function csvCell(v){ const s=String(v==null?'':v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
 function exportRankCSV(){
-  const head=['סיווג','אזור','דירוג','שם המתח״ם','ביקוש כולל','ציון'];
+  const head=['סיווג','אזור','דירוג','שם המתח״ם','ביקוש כולל','ציון','אמצעי מתע״ן (מס׳)'];
   const lines=[head];
   rankBlocks().forEach(b=>{
     [...b.hubs].sort((a,b)=>(a.rank||9999)-(b.rank||9999)).forEach((h,i)=>{
-      lines.push([rankView, b.title, i+1, h.name, Math.round(h.demand||0), h.score==null?'':h.score]);
+      lines.push([rankView, b.title, i+1, h.name, Math.round(h.demand||0), h.score==null?'':h.score, fmtModes(h)]);
     });
   });
   const csv='﻿'+lines.map(r=>r.map(csvCell).join(',')).join('\r\n');
