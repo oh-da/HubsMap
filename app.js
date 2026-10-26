@@ -535,7 +535,7 @@ function rankTableHTML(hubs){
         <td class="name">${esc(h.name)}</td>
         <td class="num">${fmt(h.demand)}</td>
         <td class="score">${fmtScore(h.score)}</td>
-        <td class="modes">${esc(fmtModes(h))}</td>
+        <td class="modes">${hubModes(h).length ? `<bdi>${esc(hubModes(h).map(modeLabel).join(', '))}</bdi> <span class="cnt">(${h.numModes??hubModes(h).length})</span>` : '—'}</td>
       </tr>`).join('')}
     </tbody>
   </table>`;
