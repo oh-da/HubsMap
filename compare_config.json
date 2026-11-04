@@ -1,0 +1,16 @@
+{
+  "route_tol_m": 100.0,
+  "rail_tol_m": 250.0,
+  "stop_tol_m": 150.0,
+  "rail_assign_tol_m": 250.0,
+  "match_min_score": 0.5,
+  "full_cov": 0.8,
+  "only_max_score": 0.2,
+  "multi_cov": 0.3,
+  "containment": true,
+  "apply_offset": true,
+  "offset_radius_m": 10000.0,
+  "offset_passes": 2,
+  "hub_match_tol_m": 400.0,
+  "tod_join_tol_m": 200.0
+}
