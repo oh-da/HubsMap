@@ -164,7 +164,13 @@ function hubsBasemap(map, select, note) {
     layer.addTo(map);
   }
   select.addEventListener('change', function () { auto = false; note.textContent = ''; use(Number(select.value)); });
-  use(0);
+  var requestedBasemap = new URLSearchParams(window.location.search).get('basemap');
+  if (requestedBasemap !== null && /^[0-9]+$/.test(requestedBasemap) && Number(requestedBasemap) < list.length) {
+    select.value = requestedBasemap;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  } else {
+    use(0);
+  }
   return {current: function () { return list[current].id; }};
 }
 
