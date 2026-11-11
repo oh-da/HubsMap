@@ -179,6 +179,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
   border:1px solid var(--line);box-shadow:var(--shadow);display:grid;place-items:center;color:var(--ink);
 }
 .tool-btn:hover{background:#fff}
+.tool-btn:disabled{opacity:.55;cursor:progress}
 .tool-btn svg{width:18px;height:18px}
 .leaflet-control-zoom{display:none}
 .leaflet-container{font-family:"Assistant",sans-serif;background:#E8E4DC}
@@ -409,6 +410,9 @@ table.rk td.modes .cnt{font-weight:800;color:var(--ink);font-variant-numeric:tab
         <button class="tool-btn" id="btnZout" title="התרחק">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
         </button>
+        <button class="tool-btn" id="btnExportPng" title="ייצוא המפה כתמונה (PNG)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg>
+        </button>
       </div>
       <div class="detail" id="detail"></div>
     </main>
@@ -435,6 +439,6 @@ table.rk td.modes .cnt{font-weight:800;color:var(--ink);font-variant-numeric:tab
 
 <script src="vendor/leaflet/leaflet.js"></script>
 <script src="hubs-data.js?v=20260621"></script>
-<script src="app.js?v=20260621"></script>
+<script src="app.js?v=20261111"></script>
 </body>
 </html>
