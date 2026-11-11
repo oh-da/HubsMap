@@ -19,6 +19,9 @@ per-hub detail drawer.
 - **Layers** — switch base map (light/gray/dark), toggle an inferred line
   network, toggle **shared layers** committed to the repo (see below), and
   upload your own GeoJSON overlays (persisted per-browser in `localStorage`).
+- **PNG export** — the download button in the map's tool stack saves the current
+  map view (base map, hubs, visible layers, title card and attribution) as a 2×
+  PNG. The filter rail, detail drawer and buttons are left out.
 
 ## Project layout
 

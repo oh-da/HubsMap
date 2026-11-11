@@ -96,7 +96,8 @@ state.rankMax = RANK_MAX;
 const map = L.map('map',{zoomControl:false,attributionControl:true,minZoom:7,maxZoom:16}).setView([32.05,34.95],9);
 const OSM_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const OSM_ATTR='© OpenStreetMap contributors';
-L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-light'}).addTo(map);
+/* crossOrigin lets the PNG export draw the tiles onto a canvas without tainting it */
+L.tileLayer(OSM_URL,{maxZoom:19,attribution:OSM_ATTR,className:'base-light',crossOrigin:'anonymous'}).addTo(map);
 
 const overlayPane = map.createPane('hubs'); overlayPane.style.zIndex=620;
 const uploadPane = map.createPane('uploads'); uploadPane.style.zIndex=540;
@@ -622,6 +623,130 @@ document.getElementById('btnRanks').onclick=openRankModal;
 document.getElementById('rankClose').onclick=closeRankModal;
 rankModal.addEventListener('click',e=>{ if(e.target===rankModal) closeRankModal(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && rankModal.classList.contains('open')) closeRankModal(); });
+
+/* ── PNG export ──
+   Renders the map viewport (tiles + vector panes + title card + attribution)
+   onto a canvas and downloads it. The rail, detail drawer and tool buttons are
+   deliberately left out. No library: tiles are <img>s and Leaflet's vector
+   layers are plain SVG, so both can be drawn straight onto a canvas. ── */
+const EXPORT_SCALE = 2; // output pixels per CSS pixel (crisp vectors / text)
+const BASE_LIGHT_FILTER = { grayscale:1, brightness:1.07, contrast:.92 }; // mirrors .base-light in index.html
+
+const loadImage = src => new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=()=>rej(new Error('image failed: '+src.slice(0,60))); i.src=src; });
+
+/* Apply the CSS `grayscale() brightness() contrast()` chain by hand so the
+   export looks the same in every browser (canvas ctx.filter is not universal). */
+function applyBaseFilter(ctx,w,h,{grayscale,brightness,contrast}){
+  const img=ctx.getImageData(0,0,w,h), d=img.data;
+  const icpt=127.5*(1-contrast);
+  for(let i=0;i<d.length;i+=4){
+    let r=d[i],g=d[i+1],b=d[i+2];
+    if(grayscale){ const y=.2126*r+.7152*g+.0722*b; r=g=b=y; }
+    r=(r*brightness)*contrast+icpt; g=(g*brightness)*contrast+icpt; b=(b*brightness)*contrast+icpt;
+    d[i]=r<0?0:r>255?255:r; d[i+1]=g<0?0:g>255?255:g; d[i+2]=b<0?0:b>255?255:b;
+  }
+  ctx.putImageData(img,0,0);
+}
+
+async function drawTiles(ctx,container,base){
+  const layers=[...container.querySelectorAll('.leaflet-tile-pane .leaflet-layer')];
+  for(const layer of layers){
+    const tiles=[...layer.querySelectorAll('img.leaflet-tile-loaded')].filter(t=>t.complete&&t.naturalWidth>0);
+    if(!tiles.length) continue;
+    // Draw each tile layer on its own canvas so a per-layer CSS filter can be applied before compositing
+    const lc=document.createElement('canvas'); lc.width=ctx.canvas.width; lc.height=ctx.canvas.height;
+    const lctx=lc.getContext('2d'); lctx.scale(EXPORT_SCALE,EXPORT_SCALE);
+    tiles.forEach(t=>{ const r=t.getBoundingClientRect(); lctx.drawImage(t,r.left-base.left,r.top-base.top,r.width,r.height); });
+    if(layer.classList.contains('base-light')) applyBaseFilter(lctx,lc.width,lc.height,BASE_LIGHT_FILTER);
+    ctx.globalAlpha=parseFloat(getComputedStyle(layer).opacity)||1;
+    ctx.drawImage(lc,0,0,lc.width,lc.height,0,0,lc.width/EXPORT_SCALE,lc.height/EXPORT_SCALE);
+    ctx.globalAlpha=1;
+  }
+}
+
+async function drawVectorPanes(ctx,container,base){
+  const svgs=[...container.querySelectorAll('.leaflet-pane > svg')]
+    .sort((a,b)=>(parseInt(getComputedStyle(a.parentElement).zIndex)||0)-(parseInt(getComputedStyle(b.parentElement).zIndex)||0));
+  for(const svg of svgs){
+    if(!svg.querySelector('path')) continue;
+    const r=svg.getBoundingClientRect();
+    const clone=svg.cloneNode(true);
+    clone.removeAttribute('style'); // drop Leaflet's translate3d; we position via the bounding rect
+    clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+    clone.setAttribute('width',r.width); clone.setAttribute('height',r.height);
+    const src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(clone));
+    const img=await loadImage(src);
+    ctx.drawImage(img,r.left-base.left,r.top-base.top,r.width,r.height);
+  }
+}
+
+function roundRect(ctx,x,y,w,h,rad){
+  ctx.beginPath();
+  ctx.moveTo(x+rad,y); ctx.arcTo(x+w,y,x+w,y+h,rad); ctx.arcTo(x+w,y+h,x,y+h,rad);
+  ctx.arcTo(x,y+h,x,y,rad); ctx.arcTo(x,y,x+w,y,rad); ctx.closePath();
+}
+
+/* Title card (top-right, like .map-title) and OSM attribution (bottom-right). */
+function drawOverlays(ctx,W,H){
+  const title=document.querySelector('.map-title');
+  if(title){
+    const k=title.querySelector('.k')?.textContent.trim()||'';
+    const h2=title.querySelector('h2')?.textContent.trim()||'';
+    const count=document.getElementById('mapCount')?.textContent.trim()||'';
+    ctx.save(); ctx.direction='rtl'; ctx.textAlign='right'; ctx.textBaseline='alphabetic';
+    const padX=16, x=W-18, y=16;
+    ctx.font='900 18px "Frank Ruhl Libre",Georgia,serif';
+    const w=Math.max(ctx.measureText(h2).width, (ctx.font='700 10px Assistant,sans-serif',ctx.measureText(k).width*1.4), (ctx.font='600 11.5px Assistant,sans-serif',ctx.measureText(count).width))+padX*2;
+    const h=11+13+24+17+12;
+    ctx.fillStyle='rgba(255,255,255,.92)'; ctx.strokeStyle='#E6E0D4'; ctx.lineWidth=1;
+    roundRect(ctx,x-w,y,w,h,12); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#938B7D'; ctx.font='700 10px Assistant,sans-serif'; ctx.letterSpacing='1.4px';
+    ctx.fillText(k.toUpperCase(),x-padX,y+11+10); ctx.letterSpacing='0px';
+    ctx.fillStyle='#1B1915'; ctx.font='900 18px "Frank Ruhl Libre",Georgia,serif';
+    ctx.fillText(h2,x-padX,y+11+13+20);
+    ctx.fillStyle='#57514F'; ctx.font='600 11.5px Assistant,sans-serif';
+    ctx.fillText(count,x-padX,y+11+13+24+15);
+    ctx.restore();
+  }
+  const attr=document.querySelector('.leaflet-control-attribution');
+  if(attr){
+    const t=attr.textContent.replace(/\s+/g,' ').trim();
+    ctx.save(); ctx.direction='ltr'; ctx.textAlign='right'; ctx.textBaseline='bottom';
+    ctx.font='10px Assistant,system-ui,sans-serif';
+    const tw=ctx.measureText(t).width+10;
+    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.fillRect(W-tw,H-16,tw,16);
+    ctx.fillStyle='#333'; ctx.fillText(t,W-5,H-3);
+    ctx.restore();
+  }
+}
+
+async function exportMapPNG(){
+  const btn=document.getElementById('btnExportPng');
+  const container=map.getContainer();
+  const base=container.getBoundingClientRect();
+  const W=Math.round(base.width), H=Math.round(base.height);
+  if(!W||!H) return;
+  btn.disabled=true;
+  try{
+    const canvas=document.createElement('canvas');
+    canvas.width=W*EXPORT_SCALE; canvas.height=H*EXPORT_SCALE;
+    const ctx=canvas.getContext('2d'); ctx.scale(EXPORT_SCALE,EXPORT_SCALE);
+    ctx.fillStyle=getComputedStyle(container).backgroundColor||'#E8E4DC'; ctx.fillRect(0,0,W,H);
+    await drawTiles(ctx,container,base);
+    await drawVectorPanes(ctx,container,base);
+    drawOverlays(ctx,W,H);
+    const blob=await new Promise((res,rej)=>{ try{ canvas.toBlob(b=>b?res(b):rej(new Error('toBlob failed')),'image/png'); }catch(e){ rej(e); } });
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=`מפת-מתחמים-${new Date().toISOString().slice(0,10)}.png`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }catch(e){
+    console.error('PNG export failed',e);
+    alert('ייצוא המפה נכשל. נסו שוב לאחר שהמפה סיימה להיטען.');
+  }finally{ btn.disabled=false; }
+}
+document.getElementById('btnExportPng').onclick=exportMapPNG;
 
 /* ── init ── */
 loadUserLayers();
