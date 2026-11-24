@@ -34,7 +34,7 @@ per-hub detail drawer.
 | `scripts/generate_hubs_data.py` | Builds `hubs-data.js` from the xlsx |
 | `layers/` | Shared GeoJSON layers shown to every viewer ([layers/README.md](layers/README.md)) |
 | `compare/` | Network comparison against the agency network (see below) |
-| `scripts/build_network_routes_map.py` | Builds `compare/mt_network_routes.html` and `compare/mt_network_lines.csv` from the agency GeoPackage |
+| `scripts/build_network_routes_map.py` | Builds `compare/mt_network_routes.html`, `compare/mt_network_lines.csv` and `compare/mt_network_decisions.csv` from the agency GeoPackage |
 | `scripts/add_mot_differences.py` | Adds the marked differences of the agency GeoPackage to the two comparison pages |
 | `.github/workflows/deploy-pages.yml` | Auto-deploys the site to GitHub Pages on push to `main` |
 
@@ -55,6 +55,7 @@ are standalone pages.
 | `MT_Network_12-11-2026.gpkg` | The agency network (layers `lines`, `stations`, `mot_differences`; EPSG:2039) |
 | `MT_Network_MetaData.xlsx` | Code dictionary of the agency network (Hebrew labels) |
 | `mt_network_routes.html` | Standalone map of the agency routes, coloured by mode, with route names; filters by mode and by opening year ("up to 2050" = every line that opens by 2050) |
+| `mt_network_decisions.csv` | The decision for every route: the columns of `mt_network_lines.csv` plus `status` and `comment`. Written by the routes map (see "Decision tracking") |
 | `mt_network_lines.csv` | The same routes as a table, one row per route: mode, line number and names, opening and closing year, plan, length and number of stops (UTF-8 with BOM, opens in Excel) |
 
 The comparison files were produced by `hubs compare-network` of the
@@ -87,8 +88,42 @@ python3 scripts/build_network_routes_map.py \
     --gpkg compare/MT_Network_12-11-2026.gpkg \
     --meta compare/MT_Network_MetaData.xlsx \
     --out compare/mt_network_routes.html \
-    --csv compare/mt_network_lines.csv
+    --csv compare/mt_network_lines.csv \
+    --decisions compare/mt_network_decisions.csv --github-repo oh-da/HubsMap \
+    --leaflet ../vendor/leaflet
 ```
+
+Run it on an up-to-date checkout of `main`: the script rewrites
+`mt_network_decisions.csv` with the current lines and keeps the status and
+comment that are already in the file.
+
+### Decision tracking
+
+The routes map records, for every line, whether it has to be updated in the
+Hubs model. Click a line (or pick it under "Find a line"): its popup has four
+choices — **Updated**, **No need to update**, **Need to update**,
+**Irrelevant** — and a comment box. The panel counts the lines per status,
+the "any decision" filter shows one status (or the lines not decided yet), and
+a decided line carries a mark beside its name on the map.
+
+Changes are kept in the browser until **Save to GitHub** is pressed. Saving
+commits `compare/mt_network_decisions.csv` to `main` through the GitHub API, so
+everyone sees the same decisions and the file's history shows who changed what.
+Before writing, the page reads the file again and keeps the decisions other
+people saved in the meantime.
+
+Saving needs a GitHub token, asked for on the first save and kept in that
+browser only:
+
+1. GitHub → **Settings → Developer settings → Personal access tokens →
+   Fine-grained tokens → Generate new token**.
+2. **Repository access**: "Only select repositories" → `HubsMap`.
+3. **Permissions → Repository permissions → Contents**: "Read and write".
+
+Anyone can open the map and read the decisions; only people with such a token
+can save. Each save is a commit to `main`, so it also redeploys the site.
+Because the page handles a token, it loads Leaflet from this site's own
+`vendor/leaflet` instead of a CDN.
 
 ## Regenerating the data
 
