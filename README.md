@@ -34,6 +34,7 @@ per-hub detail drawer.
 | `scripts/generate_hubs_data.py` | Builds `hubs-data.js` from the xlsx |
 | `layers/` | Shared GeoJSON layers shown to every viewer ([layers/README.md](layers/README.md)) |
 | `compare/` | Network comparison against the agency network (see below) |
+| `scripts/build_network_routes_map.py` | Builds `compare/mt_network_routes.html` from the agency GeoPackage |
 | `.github/workflows/deploy-pages.yml` | Auto-deploys the site to GitHub Pages on push to `main` |
 
 ### `compare/`
@@ -50,6 +51,26 @@ are standalone pages.
 | `network_comparison.gpkg` | Comparison geometries (GeoPackage) |
 | `network_comparison_routes.html` | Standalone map of the route comparison |
 | `network_comparison_hubs.html` | Standalone map of the hub comparison |
+| `MT_Network_12-11-2026.gpkg` | The agency network (layers `lines`, `stations`, `mot_differences`; EPSG:2039) |
+| `MT_Network_MetaData.xlsx` | Code dictionary of the agency network (Hebrew labels) |
+| `mt_network_routes.html` | Standalone map of the agency routes, coloured by mode, with route names |
+
+The comparison files were produced by `hubs compare-network` of the
+[HubPrioritizing](https://github.com/oh-da/HubPrioritizing) project from the
+2026-11-04 run. The `lines` and `stations` layers of
+`MT_Network_12-11-2026.gpkg` are the same network that run was compared with:
+re-running the comparison against it reproduces every row of
+`network_comparison.xlsx`, so the comparison files are current for it.
+
+To rebuild the routes map after replacing the GeoPackage:
+
+```bash
+pip install geopandas openpyxl
+python3 scripts/build_network_routes_map.py \
+    --gpkg compare/MT_Network_12-11-2026.gpkg \
+    --meta compare/MT_Network_MetaData.xlsx \
+    --out compare/mt_network_routes.html
+```
 
 ## Regenerating the data
 
