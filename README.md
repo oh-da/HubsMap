@@ -34,7 +34,7 @@ per-hub detail drawer.
 | `scripts/generate_hubs_data.py` | Builds `hubs-data.js` from the xlsx |
 | `layers/` | Shared GeoJSON layers shown to every viewer ([layers/README.md](layers/README.md)) |
 | `compare/` | Network comparison against the agency network (see below) |
-| `scripts/build_network_routes_map.py` | Builds `compare/mt_network_routes.html` from the agency GeoPackage |
+| `scripts/build_network_routes_map.py` | Builds `compare/mt_network_routes.html` and `compare/mt_network_lines.csv` from the agency GeoPackage |
 | `scripts/add_mot_differences.py` | Adds the marked differences of the agency GeoPackage to the two comparison pages |
 | `.github/workflows/deploy-pages.yml` | Auto-deploys the site to GitHub Pages on push to `main` |
 
@@ -54,7 +54,8 @@ are standalone pages.
 | `network_comparison_hubs.html` | Standalone map of the hub comparison |
 | `MT_Network_12-11-2026.gpkg` | The agency network (layers `lines`, `stations`, `mot_differences`; EPSG:2039) |
 | `MT_Network_MetaData.xlsx` | Code dictionary of the agency network (Hebrew labels) |
-| `mt_network_routes.html` | Standalone map of the agency routes, coloured by mode, with route names |
+| `mt_network_routes.html` | Standalone map of the agency routes, coloured by mode, with route names; filters by mode and by opening year ("up to 2050" = every line that opens by 2050) |
+| `mt_network_lines.csv` | The same routes as a table, one row per route: mode, line number and names, opening and closing year, plan, length and number of stops (UTF-8 with BOM, opens in Excel) |
 
 The comparison files were produced by `hubs compare-network` of the
 [HubPrioritizing](https://github.com/oh-da/HubPrioritizing) project from the
@@ -75,14 +76,18 @@ pip install geopandas
 python3 scripts/add_mot_differences.py --gpkg compare/MT_Network_12-11-2026.gpkg
 ```
 
-To rebuild the routes map after replacing the GeoPackage:
+The agency file gives no origin or destination for a line, so the table has
+none either.
+
+To rebuild the routes map and the table after replacing the GeoPackage:
 
 ```bash
 pip install geopandas openpyxl
 python3 scripts/build_network_routes_map.py \
     --gpkg compare/MT_Network_12-11-2026.gpkg \
     --meta compare/MT_Network_MetaData.xlsx \
-    --out compare/mt_network_routes.html
+    --out compare/mt_network_routes.html \
+    --csv compare/mt_network_lines.csv
 ```
 
 ## Regenerating the data
