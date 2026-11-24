@@ -121,7 +121,11 @@ browser only:
 3. **Permissions → Repository permissions → Contents**: "Read and write".
 
 Anyone can open the map and read the decisions; only people with such a token
-can save. Each save is a commit to `main`, so it also redeploys the site.
+can save. A save is a commit to `main` that changes only the decisions file,
+and such a commit does not redeploy the site: the map reads the file through
+the GitHub API, so it shows the saved decisions at once. The copy of the file
+on the site is only a fallback for when the API cannot be reached, and it is
+refreshed by the next deploy.
 Because the page handles a token, it loads Leaflet from this site's own
 `vendor/leaflet` instead of a CDN.
 
@@ -187,7 +191,9 @@ The site is published with one shareable link via GitHub Pages:
 1. In the repo: **Settings → Pages → Build and deployment → Source = "GitHub
    Actions"** (one-time).
 2. Merge to `main`. The [`deploy-pages.yml`](.github/workflows/deploy-pages.yml)
-   workflow builds and deploys automatically on every push to `main`.
+   workflow builds and deploys automatically on every push to `main` (except a
+   push that only changes `compare/mt_network_decisions.csv`), and retries the
+   deploy step once if GitHub fails it.
 3. Share the URL — `https://hubsmap.ohad.pro/`.
 
 Every later push to `main` (new data, new layers) redeploys automatically.
