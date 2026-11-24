@@ -8,12 +8,17 @@ HTML page: every route drawn in the colour of its mode, with its name as a label
     python3 scripts/build_network_routes_map.py \
         --gpkg compare/MT_Network_12-11-2026.gpkg \
         --meta compare/MT_Network_MetaData.xlsx \
-        --out compare/mt_network_routes.html
+        --out compare/mt_network_routes.html \
+        --csv compare/mt_network_lines.csv
 
 A *route* is ``(type, line_id)``; the existing rail segments all share ``line_id = 0``, so for
 them the feature ``name`` completes the key. This is the same definition the network comparison
 uses, so the route count matches the comparison pages. The label of a route is its ``line_name``
 when the file has one, otherwise its ``name``.
+
+``--csv`` also writes the list of routes as a table (one row per route). The file has no origin
+or destination of a line, so the table has none: its stops carry street names only, and those
+identify both ends of a line for about one route in six.
 """
 
 from __future__ import annotations
@@ -41,6 +46,11 @@ OTHER_MODE = {"color": "#52514e", "weight": 3, "dash": "4 4"}  # a type not list
 GENERIC_LINE_NAMES = {"fast rail"}  # a line_name shared by many routes: the line_id is appended
 ANCHOR_FRACTIONS = (0.5, 0.35, 0.65, 0.2, 0.8)  # label positions tried along the longest part
 SIMPLIFY_M = 2.0
+RAIL_ASSIGN_M = 250.0  # a stop with line_id 0 belongs to the nearest line_id 0 feature this close
+CSV_COLUMNS = [
+    "mode", "mode_he", "line_id", "line_name", "name", "year_open", "year_close", "plan", "source",
+    "length_km", "stops",
+]
 
 
 def _text(value) -> str:
@@ -90,13 +100,67 @@ def _parts(geom) -> list[LineString]:
     return [g for g in getattr(geom, "geoms", []) if isinstance(g, LineString)]
 
 
-def build_data(gpkg: Path, meta: Path | None) -> dict:
+def read_stops(gpkg: Path, lines: gpd.GeoDataFrame) -> pd.DataFrame:
+    """The ``stations`` layer with the route key of every stop (column ``_key``).
+
+    A stop belongs to the route of its ``type`` and ``line_id``. The existing rail has
+    ``line_id = 0`` on every segment, so such a stop goes to the nearest ``line_id = 0`` feature
+    of its type within ``RAIL_ASSIGN_M`` (the rule of the network comparison); farther stops
+    belong to no route.
+    """
+    stops = gpd.read_file(gpkg, layer="stations")
+    stops = stops[stops.geometry.notna() & ~stops.geometry.is_empty].reset_index(drop=True)
+    stops["line_id"] = pd.to_numeric(stops["line_id"], errors="coerce").fillna(-1).astype(int)
+    stops["type"] = stops["type"].map(_text)
+    stops["_key"] = [f"{t}:{i}" if i != 0 else None for t, i in zip(stops["type"], stops["line_id"])]
+    unnumbered = lines[lines["line_id"] == 0][["type", "_key", "geometry"]]
+    for mode, segments in unnumbered.groupby("type"):
+        mine = stops[(stops["type"] == mode) & (stops["line_id"] == 0)]
+        if mine.empty:
+            continue
+        near = gpd.sjoin_nearest(mine[["geometry"]], segments[["_key", "geometry"]],
+                                 max_distance=RAIL_ASSIGN_M, how="inner")
+        near = near.sort_values("index_right")
+        near = near[~near.index.duplicated(keep="first")]
+        stops.loc[near.index, "_key"] = near["_key"]
+    return stops[stops["_key"].notna() & stops["_key"].isin(set(lines["_key"]))]
+
+
+def build_table(data: dict, stops: pd.DataFrame) -> pd.DataFrame:
+    """One row per route, in the order of the mode list, then by line number and name."""
+    mode = {m["type"]: (i, m) for i, m in enumerate(data["modes"])}
+    n_stops = stops.groupby("_key").size()
+    rows = []
+    for route in data["routes"]:
+        rows.append({
+            "_order": (mode[route["type"]][0], route["line_id"], route["label"]),
+            "mode": route["type"],
+            "mode_he": mode[route["type"]][1]["he"],
+            "line_id": route["line_id"] if route["line_id"] > 0 else "",
+            "line_name": " / ".join(route["line_names"]),
+            "name": " / ".join(route["names"]),
+            "year_open": route["opens"] if route["opens"] is not None else "",
+            "year_close": route["closes"] if route["closes"] is not None else "",
+            "plan": " / ".join(route["plans"]),
+            "source": " / ".join(route["sources"]),
+            "length_km": route["km"],
+            "stops": int(n_stops.get(route["key"], 0)),
+        })
+    rows.sort(key=lambda r: r["_order"])
+    return pd.DataFrame(rows, columns=CSV_COLUMNS)
+
+
+def read_lines(gpkg: Path) -> gpd.GeoDataFrame:
     lines = gpd.read_file(gpkg, layer="lines")
     lines = lines[lines.geometry.notna() & ~lines.geometry.is_empty].reset_index(drop=True)
     lines["line_id"] = pd.to_numeric(lines["line_id"], errors="coerce").fillna(-1).astype(int)
     lines["type"] = lines["type"].map(_text)
     lines["_len"] = lines.geometry.length
     lines["_key"] = [route_key(r) for _, r in lines.iterrows()]
+    return lines
+
+
+def build_data(lines: gpd.GeoDataFrame, source: str, meta: Path | None) -> dict:
     labels = read_labels(meta)
     wgs = lines.geometry.simplify(SIMPLIFY_M).set_crs(lines.crs).to_crs(4326)
 
@@ -137,9 +201,9 @@ def build_data(gpkg: Path, meta: Path | None) -> dict:
     for extra in sorted(set(lines["type"]) - known):
         modes.append(dict(OTHER_MODE, type=extra, label=extra or "(no type)", he=labels["type"].get(extra.lower(), "")))
     present = set(lines["type"])
-    years = sorted({f[k] for f in features for k in ("opens", "closes") if f[k] is not None})
+    years = sorted({f["opens"] for f in features if f["opens"] is not None})
     return {
-        "source": gpkg.name,
+        "source": source,
         "modes": [m for m in modes if m["type"] in present],
         "routes": routes,
         "features": features,
@@ -192,6 +256,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 "Heeb
 .sym { justify-self: center; width: 28px; height: 14px; background: #f2f2f0; border-radius: 3px; }
 .pick { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-top: 6px; }
 .pick.one { grid-template-columns: 1fr; }
+.pick.two { grid-template-columns: 1fr 1fr; }
 .pick select { font: inherit; font-size: 12.5px; padding: 5px 6px; border-radius: 6px; border: 1px solid var(--panel-border); background: var(--bg); color: var(--ink); min-width: 0; }
 .pick select:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
@@ -225,6 +290,11 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 "Heeb
 <section class="panel" id="panel" aria-label="Modes and legend">
   <h1><bdi>מנהל התכנון</bdi> network: transit lines by mode</h1>
   <p class="sub" id="sub"></p>
+  <p class="eyebrow">Filter</p>
+  <div class="pick two">
+    <select id="pick-mode" aria-label="Mode"><option value="">all modes</option><option value="*" hidden>several modes</option></select>
+    <select id="pick-year" aria-label="Opening year"><option value="">all years</option></select>
+  </div>
   <p class="eyebrow">Mode</p>
   <ul class="sets" id="modes"></ul>
   <ul class="sets" style="margin-top:6px">
@@ -233,10 +303,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 "Heeb
       <span class="lbl">Line names<small>as many as fit without overlapping; zoom in for more</small></span><span class="cnt"></span></label></li>
   </ul>
   <p class="eyebrow">Find a line</p>
-  <div class="pick">
-    <select id="pick-line" aria-label="Line"><option value="">all lines</option></select>
-    <select id="pick-year" aria-label="Year"><option value="">all years</option></select>
-  </div>
+  <div class="pick one"><select id="pick-line" aria-label="Line"></select></div>
   <div class="actions">
     <button type="button" id="btn-fit">Zoom to all</button>
     <button type="button" id="btn-tlv">Tel Aviv</button>
@@ -248,7 +315,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 "Heeb
   <div class="pick one"><select id="basemap" aria-label="Basemap"></select></div>
   <p class="note bm-note" id="basemap-note" role="status" aria-live="polite"></p>
   <p class="note">A line is one mode and line number; the existing rail network has no line numbers, so it is split by the segment names of the file. Names come from the file as they are.</p>
-  <p class="note">Picking a year shows the lines open in that year: opened by then and not yet closed.</p>
+  <p class="note">Picking a year shows every line that opens by that year, including lines that close later on; the popup of a line gives its years.</p>
 </section>
 
 <script type="application/json" id="page-data">__DATA__</script>
@@ -349,7 +416,7 @@ function hubsBasemap(map, select, note) {
     bounds.extend(line.getBounds());
     r.bounds = (r.bounds || L.latLngBounds([])).extend(line.getBounds());
   });
-  const inYear = f => state.year == null || ((f.opens == null || f.opens <= state.year) && (f.closes == null || f.closes > state.year));
+  const inYear = f => state.year == null || f.opens == null || f.opens <= state.year;  // opened by that year
   const years = r => has(r.opens) ? (has(r.closes) ? r.opens + ' to ' + r.closes : 'from ' + r.opens) : '';
   function popup(r) {
     const m = MODE[r.type];
@@ -369,6 +436,9 @@ function hubsBasemap(map, select, note) {
       if (show !== x.shown) { x.shown = show; changed = true; }
       if (show) x.r.visible = true;
     });
+    if (state.pick != null && !ROUTE[state.pick].visible) state.pick = null;
+    if (changed) fillLines();
+    sel.value = state.pick || '';
     if (changed || drawnPick !== state.pick) {  // a canvas draws in the order layers were added: casings, then lines
       drawnPick = state.pick;
       casingGroup.clearLayers(); lineGroup.clearLayers();
@@ -393,8 +463,22 @@ function hubsBasemap(map, select, note) {
     li.innerHTML = '<label><input type="checkbox" checked><svg class="sym" viewBox="0 0 28 14" aria-hidden="true"><line x1="2" y1="7" x2="26" y2="7" stroke="' + m.color
       + '" stroke-width="' + m.weight + '"' + (m.dash ? ' stroke-dasharray="' + m.dash + '"' : ' stroke-linecap="round"') + '/></svg>'
       + '<span class="lbl">' + esc(m.label) + (m.he ? '<small>' + bdi(m.he) + '</small>' : '') + '</span><span class="cnt" id="cnt-' + esc(m.type) + '"></span></label>';
-    li.querySelector('input').addEventListener('change', e => { MODE[m.type].on = e.target.checked; refresh(); });
+    const box = li.querySelector('input');
+    MODE[m.type].box = box;
+    box.addEventListener('change', e => { MODE[m.type].on = e.target.checked; syncMode(); refresh(); });
     $('modes').appendChild(li);
+  });
+
+  // Mode filter: one mode or all of them; the checkboxes above allow any other combination.
+  const selMode = $('pick-mode');
+  DATA.modes.forEach(m => { const o = document.createElement('option'); o.value = m.type; o.textContent = modeText(m); selMode.appendChild(o); });
+  function syncMode() {
+    const on = DATA.modes.filter(m => MODE[m.type].on);
+    selMode.value = on.length === DATA.modes.length ? '' : on.length === 1 ? on[0].type : '*';
+  }
+  selMode.addEventListener('change', () => {
+    DATA.modes.forEach(m => { MODE[m.type].on = selMode.value === '' || selMode.value === m.type; MODE[m.type].box.checked = MODE[m.type].on; });
+    refresh();
   });
 
   // Name labels: one per line, placed where it does not cover another label or the panel.
@@ -436,18 +520,27 @@ function hubsBasemap(map, select, note) {
   map.on('moveend zoomend resize', placeLabels);
   $('set-names').addEventListener('change', e => pane.classList.toggle('names-off', !e.target.checked));
 
-  // Find a line (grouped by mode) and the year filter.
+  // Find a line: the lines that pass the filters, grouped by mode. And the year filter.
   const sel = $('pick-line'), selYear = $('pick-year');
-  DATA.modes.forEach(m => {
-    const g = document.createElement('optgroup'); g.label = modeText(m);
-    MODE[m.type].routes.map(k => ROUTE[k]).sort((a, b) => a.label.localeCompare(b.label, 'en', {numeric: true})).forEach(r => {
-      const o = document.createElement('option'); o.value = r.key;
-      o.textContent = r.label + (r.line_id > 0 && !r.label.includes(String(r.line_id)) ? ' (' + r.line_id + ')' : '');
-      g.appendChild(o);
+  function fillLines() {
+    sel.textContent = '';
+    const all = document.createElement('option'); all.value = '';
+    sel.appendChild(all);
+    let n = 0;
+    DATA.modes.forEach(m => {
+      const shown = MODE[m.type].routes.map(k => ROUTE[k]).filter(r => r.visible).sort((a, b) => a.label.localeCompare(b.label, 'en', {numeric: true}));
+      if (!shown.length) return;
+      const g = document.createElement('optgroup'); g.label = modeText(m);
+      shown.forEach(r => {
+        const o = document.createElement('option'); o.value = r.key;
+        o.textContent = r.label + (r.line_id > 0 && !r.label.includes(String(r.line_id)) ? ' (' + r.line_id + ')' : '');
+        g.appendChild(o);
+      });
+      sel.appendChild(g); n += shown.length;
     });
-    sel.appendChild(g);
-  });
-  DATA.years.forEach(y => { const o = document.createElement('option'); o.value = y; o.textContent = 'open in ' + y; selYear.appendChild(o); });
+    all.textContent = n === DATA.routes.length ? 'all ' + n + ' lines' : 'all ' + n + ' lines shown';
+  }
+  DATA.years.forEach(y => { const o = document.createElement('option'); o.value = y; o.textContent = 'up to ' + y; selYear.appendChild(o); });
   // Fit padding that keeps the fitted area clear of the panel when it sits beside the map.
   const clear = pad => window.innerWidth > 560 ? {paddingTopLeft: [panel.offsetWidth + 12 + pad, pad], paddingBottomRight: [pad, pad]} : {padding: [pad, pad]};
   function zoomTo(key) {
@@ -455,14 +548,13 @@ function hubsBasemap(map, select, note) {
     if (r && r.bounds && r.bounds.isValid()) map.fitBounds(r.bounds, Object.assign(clear(40), {maxZoom: 15}));
   }
   function pick(key, zoom) {
-    state.pick = key || null; sel.value = key || '';
+    state.pick = key || null;
     refresh();
-    if (key && zoom) zoomTo(key);
+    if (state.pick && zoom) zoomTo(state.pick);
   }
   sel.addEventListener('change', () => pick(sel.value, true));
   selYear.addEventListener('change', () => {
     state.year = selYear.value ? Number(selYear.value) : null;
-    if (state.pick && !ROUTE[state.pick].feats.some(x => inYear(x.f))) { state.pick = null; sel.value = ''; }
     refresh();
   });
   map.on('popupopen', e => {
@@ -493,15 +585,21 @@ def main() -> None:
     parser.add_argument("--gpkg", required=True, type=Path, help="the agency network (layer `lines`)")
     parser.add_argument("--meta", type=Path, default=None, help="optional MT_Network_MetaData.xlsx (Hebrew labels)")
     parser.add_argument("--out", required=True, type=Path, help="HTML file to write")
+    parser.add_argument("--csv", type=Path, default=None, help="optional CSV file to write: one row per route")
     args = parser.parse_args()
 
-    data = build_data(args.gpkg, args.meta)
+    lines = read_lines(args.gpkg)
+    data = build_data(lines, args.gpkg.name, args.meta)
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     args.out.write_text(PAGE.replace("__DATA__", payload), encoding="utf-8")
     per_mode = pd.Series([r["type"] for r in data["routes"]]).value_counts()
     print(f"wrote {args.out} ({args.out.stat().st_size / 1e6:.1f} MB): {len(data['routes'])} routes, "
           f"{len(data['features'])} line features")
     print("  " + ", ".join(f"{m['type']} {int(per_mode.get(m['type'], 0))}" for m in data["modes"]))
+    if args.csv is not None:
+        table = build_table(data, read_stops(args.gpkg, lines))
+        table.to_csv(args.csv, index=False, encoding="utf-8-sig")  # the BOM lets Excel read the Hebrew
+        print(f"wrote {args.csv}: {len(table)} routes")
 
 
 if __name__ == "__main__":
