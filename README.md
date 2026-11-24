@@ -35,6 +35,7 @@ per-hub detail drawer.
 | `layers/` | Shared GeoJSON layers shown to every viewer ([layers/README.md](layers/README.md)) |
 | `compare/` | Network comparison against the agency network (see below) |
 | `scripts/build_network_routes_map.py` | Builds `compare/mt_network_routes.html` from the agency GeoPackage |
+| `scripts/add_mot_differences.py` | Adds the marked differences of the agency GeoPackage to the two comparison pages |
 | `.github/workflows/deploy-pages.yml` | Auto-deploys the site to GitHub Pages on push to `main` |
 
 ### `compare/`
@@ -61,6 +62,18 @@ The comparison files were produced by `hubs compare-network` of the
 `MT_Network_12-11-2026.gpkg` are the same network that run was compared with:
 re-running the comparison against it reproduces every row of
 `network_comparison.xlsx`, so the comparison files are current for it.
+
+The two comparison pages also show the 18 points of the GeoPackage's
+`mot_differences` layer as a set of their own ("Marked differences"): the
+`line` points on the routes page, the `hub` points on the hubs page, each with
+who is to correct it, the reason and the note. They are added by a script that
+inserts one marked block into each page and can be run again at any time, also
+after the pages are regenerated:
+
+```bash
+pip install geopandas
+python3 scripts/add_mot_differences.py --gpkg compare/MT_Network_12-11-2026.gpkg
+```
 
 To rebuild the routes map after replacing the GeoPackage:
 
