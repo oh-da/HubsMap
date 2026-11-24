@@ -347,5 +347,65 @@ function hubsBasemap(map, select, note) {
   window.hubsPage = {map: map, groups: groups, counts: counts, basemap: basemap};
 })();</script>
 
+<!-- mot-differences:start (scripts/add_mot_differences.py) -->
+<style>
+.md-icon { background: none; border: 0; }
+.md-icon svg { display: block; overflow: visible; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+.md-sym { justify-self: center; width: 22px; height: 16px; background: #f2f2f0; border-radius: 3px; }
+</style>
+<script type="application/json" id="mot-differences-data">{"source":"MT_Network_12-11-2026.gpkg","layer":"mot_differences","kind_label":"line differences","points":[{"kind":"line","to_correct":"MOT","reason":"layout","note":"אסטרטגית חיפה","lat":32.844289,"lng":35.101623},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":32.901274,"lng":35.268083},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":33.046468,"lng":35.417605},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":32.703832,"lng":35.400578},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":32.678233,"lng":35.242572},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":32.312997,"lng":34.986041},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":31.90082,"lng":34.839845},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":31.802422,"lng":34.71699},{"kind":"line","to_correct":"MOT","reason":"layout","note":"","lat":31.324407,"lng":34.919793},{"kind":"line","to_correct":"MOT","reason":"mode","note":"LRT to BRT","lat":31.346772,"lng":34.77964},{"kind":"line","to_correct":"MOT","reason":"mode","note":"LRT to BRT","lat":31.289909,"lng":34.683133},{"kind":"line","to_correct":"MOT","reason":"layout","note":"חלופת גורל","lat":31.356665,"lng":34.84851}]}</script>
+<script>
+// Marked differences: the points of the layer mot_differences, as one more set per "to correct".
+(function () {
+  'use strict';
+  var page = window.hubsPage, panel = document.getElementById('panel');
+  if (!page || !page.map || !panel || typeof L === 'undefined') return;
+  var DATA = JSON.parse(document.getElementById('mot-differences-data').textContent);
+  if (!DATA.points.length) return;
+  var esc = function (t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]; }); };
+  var INK = '#1c1b18', PAPER = '#ffffff';
+  // A diamond, so it cannot be mistaken for a hub (circle) or a line; the fill tells who corrects.
+  var LOOK = {Team: {fill: INK, stroke: PAPER, width: 1.6}, MOT: {fill: PAPER, stroke: INK, width: 2.4}};
+  var look = function (who) { return LOOK[who] || {fill: '#8a877c', stroke: PAPER, width: 1.6}; };
+  var diamond = function (who, size) {
+    var k = look(who), h = size / 2, r = h - 2;
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" aria-hidden="true"><path d="M' + h + ' ' + (h - r) + ' L' + (h + r) + ' ' + h + ' L' + h + ' ' + (h + r) + ' L' + (h - r) + ' ' + h + ' Z" fill="' + k.fill + '" stroke="' + k.stroke + '" stroke-width="' + k.width + '" stroke-linejoin="round"/></svg>';
+  };
+  var who = [];
+  DATA.points.forEach(function (p) { if (who.indexOf(p.to_correct) < 0) who.push(p.to_correct); });
+  who.sort(function (a, b) { return (a === 'Team' ? 0 : a === 'MOT' ? 1 : 2) - (b === 'Team' ? 0 : b === 'MOT' ? 1 : 2) || a.localeCompare(b); });
+
+  var lists = panel.querySelectorAll('ul.sets'), last = lists[lists.length - 1];
+  var head = document.createElement('p'), list = document.createElement('ul');
+  head.className = 'eyebrow'; head.textContent = 'Marked differences';
+  list.className = 'sets';
+  last.parentNode.insertBefore(list, last.nextSibling);
+  last.parentNode.insertBefore(head, list);
+
+  var groups = {};
+  who.forEach(function (w) {
+    var pts = DATA.points.filter(function (p) { return p.to_correct === w; });
+    var group = groups[w] = L.layerGroup().addTo(page.map);
+    pts.forEach(function (p) {
+      var title = (p.kind === 'hub' ? 'Hub' : p.kind === 'line' ? 'Line' : esc(p.kind)) + ' difference';
+      var rows = [['to correct', esc(w)], ['reason', esc(p.reason)], ['note', p.note ? '<bdi>' + esc(p.note) + '</bdi>' : ''], ['from', '<bdi>' + esc(DATA.source) + '</bdi>, layer ' + esc(DATA.layer)]];
+      var m = L.marker([p.lat, p.lng], {icon: L.divIcon({className: 'md-icon', html: diamond(w, 22), iconSize: [22, 22], iconAnchor: [11, 11], popupAnchor: [0, -10]}),
+        title: title + ', to correct: ' + w, alt: title, riseOnHover: true});
+      m.bindTooltip(esc(title) + ' · to correct: ' + esc(w) + (p.reason ? ' · ' + esc(p.reason) : ''), {direction: 'top', offset: [0, -9]});
+      m.bindPopup('<div class="pp" dir="auto"><h2>' + esc(title) + '</h2><dl class="kv">' + rows.filter(function (r) { return r[1]; }).map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl></div>', {maxWidth: 320});
+      group.addLayer(m);
+    });
+    var reasons = [];
+    pts.forEach(function (p) { if (p.reason && reasons.indexOf(p.reason) < 0) reasons.push(p.reason); });
+    var li = document.createElement('li');
+    li.innerHTML = '<label><input type="checkbox" checked><span class="md-sym">' + diamond(w, 16).replace('<svg ', '<svg style="display:block;margin:0 auto" ') + '</span>'
+      + '<span class="lbl">To correct: ' + esc(w) + '<small>' + esc(DATA.kind_label) + ' marked in the file' + (reasons.length ? ' · ' + esc(reasons.join(', ')) : '') + '</small></span><span class="cnt">' + pts.length + '</span></label>';
+    li.querySelector('input').addEventListener('change', function (e) { if (e.target.checked) group.addTo(page.map); else page.map.removeLayer(group); });
+    list.appendChild(li);
+  });
+  page.motDifferences = {groups: groups, points: DATA.points};
+})();
+</script>
+<!-- mot-differences:end -->
 </body>
 </html>

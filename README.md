@@ -34,6 +34,8 @@ per-hub detail drawer.
 | `scripts/generate_hubs_data.py` | Builds `hubs-data.js` from the xlsx |
 | `layers/` | Shared GeoJSON layers shown to every viewer ([layers/README.md](layers/README.md)) |
 | `compare/` | Network comparison against the agency network (see below) |
+| `scripts/build_network_routes_map.py` | Builds `compare/mt_network_routes.html` from the agency GeoPackage |
+| `scripts/add_mot_differences.py` | Adds the marked differences of the agency GeoPackage to the two comparison pages |
 | `.github/workflows/deploy-pages.yml` | Auto-deploys the site to GitHub Pages on push to `main` |
 
 ### `compare/`
@@ -50,6 +52,38 @@ are standalone pages.
 | `network_comparison.gpkg` | Comparison geometries (GeoPackage) |
 | `network_comparison_routes.html` | Standalone map of the route comparison |
 | `network_comparison_hubs.html` | Standalone map of the hub comparison |
+| `MT_Network_12-11-2026.gpkg` | The agency network (layers `lines`, `stations`, `mot_differences`; EPSG:2039) |
+| `MT_Network_MetaData.xlsx` | Code dictionary of the agency network (Hebrew labels) |
+| `mt_network_routes.html` | Standalone map of the agency routes, coloured by mode, with route names |
+
+The comparison files were produced by `hubs compare-network` of the
+[HubPrioritizing](https://github.com/oh-da/HubPrioritizing) project from the
+2026-11-04 run. The `lines` and `stations` layers of
+`MT_Network_12-11-2026.gpkg` are the same network that run was compared with:
+re-running the comparison against it reproduces every row of
+`network_comparison.xlsx`, so the comparison files are current for it.
+
+The two comparison pages also show the 18 points of the GeoPackage's
+`mot_differences` layer as a set of their own ("Marked differences"): the
+`line` points on the routes page, the `hub` points on the hubs page, each with
+who is to correct it, the reason and the note. They are added by a script that
+inserts one marked block into each page and can be run again at any time, also
+after the pages are regenerated:
+
+```bash
+pip install geopandas
+python3 scripts/add_mot_differences.py --gpkg compare/MT_Network_12-11-2026.gpkg
+```
+
+To rebuild the routes map after replacing the GeoPackage:
+
+```bash
+pip install geopandas openpyxl
+python3 scripts/build_network_routes_map.py \
+    --gpkg compare/MT_Network_12-11-2026.gpkg \
+    --meta compare/MT_Network_MetaData.xlsx \
+    --out compare/mt_network_routes.html
+```
 
 ## Regenerating the data
 
