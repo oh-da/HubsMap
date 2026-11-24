@@ -33,7 +33,23 @@ per-hub detail drawer.
 | `data/hub_prioritization_results.xlsx` | Source output of the prioritization pipeline |
 | `scripts/generate_hubs_data.py` | Builds `hubs-data.js` from the xlsx |
 | `layers/` | Shared GeoJSON layers shown to every viewer ([layers/README.md](layers/README.md)) |
+| `compare/` | Network comparison against the agency network (see below) |
 | `.github/workflows/deploy-pages.yml` | Auto-deploys the site to GitHub Pages on push to `main` |
+
+### `compare/`
+
+Outputs of the network comparison run (our routes and hubs vs. the agency's
+`MT_Network`). Nothing in the dashboard reads these files; the two HTML maps
+are standalone pages.
+
+| File | Purpose |
+|------|---------|
+| `compare_config.json` | Matching tolerances and thresholds used for the run |
+| `compare_report.md`, `compare_report.json` | Run report: inputs, metrics and findings |
+| `network_comparison.xlsx` | Comparison tables |
+| `network_comparison.gpkg` | Comparison geometries (GeoPackage) |
+| `network_comparison_routes.html` | Standalone map of the route comparison |
+| `network_comparison_hubs.html` | Standalone map of the hub comparison |
 
 ## Regenerating the data
 
